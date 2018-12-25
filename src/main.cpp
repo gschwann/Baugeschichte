@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
     QCoreApplication::setOrganizationName("GrazWiki");
     QCoreApplication::setOrganizationDomain("baugeschichte.at");
-    QCoreApplication::setOrganizationName("Baugeschichte");
+    QCoreApplication::setApplicationName("Baugeschichte");
 
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName(QStringLiteral("Baugeschichte.at"));
