@@ -121,6 +121,8 @@ BaseView {
         height: parent.height / scale
         scale: appCore.extraScaling ? 2 : 1 //appCore.mapProvider === "mapboxgl" ? 1 : Screen.devicePixelRatio
 
+        gesture.acceptedGestures: MapGestureArea.PinchGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
+
         readonly property int markerSize: Theme.defaultMarkerSize / map.scale
 
         onCenterChanged: {
