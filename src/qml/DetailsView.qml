@@ -175,7 +175,8 @@ BaseView {
         height: (parent.height - bottomBar.height) / 2
         anchors.bottom: bottomBar.top
 
-        opacity: imagePathView.fullscreen ? 0 : 1
+        enabled: !root.fullscreen
+        opacity: root.fullscreen ? 0 : 1
         Behavior on opacity {
             NumberAnimation { duration: root.animationDuration }
         }
@@ -232,6 +233,7 @@ BaseView {
         width: parent.width
         height: prevImage.visible || nextImage.visible || languageSwitch.visible ? prevImage.height+10 : 0
 
+        enabled: !root.fullscreen
         opacity: imagePathView.fullscreen ? 0 : 1
         Behavior on opacity {
             NumberAnimation { duration: root.animationDuration }
