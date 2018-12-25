@@ -80,7 +80,6 @@ ListView {
                     return imageName;
                 } else {
                     var url = "http://baugeschichte.at/" + imageName;
-                    url += "?iiurlwidth=640"; // load in 640px resolution
                     return url;
                 }
             }
