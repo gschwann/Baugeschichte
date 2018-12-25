@@ -51,7 +51,6 @@ BaseView {
     }
 
     function updateRadius() {
-        scaleItem.calculateScale();
         if (autoUpdatePois) {
             var coord1 = map.toCoordinate(Qt.point(0, 0))
             var coord2 = map.toCoordinate(Qt.point(map.width-1, map.height-1))
@@ -319,39 +318,13 @@ BaseView {
         }
     }
 
-    Slider {
-        id: zoomSlider
-        from: map.minimumZoomLevel
-        to: map.maximumZoomLevel
-        live: true
-        anchors.margins: 10
-        anchors.bottom: scaleItem.top
+    MapScaleZoom {
         anchors.top: parent.top
-        anchors.right: parent.right
-        orientation: Qt.Vertical
-        onValueChanged: {
-            map.zoomLevel = value;
-        }
-
-        Connections{
-            target: map
-            onZoomLevelChanged: {
-                if (!zoomSlider.pressed) {
-                    zoomSlider.value = map.zoomLevel;
-                }
-            }
-        }
-
-        Component.onCompleted: {
-            zoomSlider.value = map.zoomLevel;
-        }
-    }
-
-    MapScale {
-        id: scaleItem
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.margins: 20
+        anchors.topMargin: 20
+        anchors.bottomMargin: 10
+        anchors.rightMargin: 5
 
         mapItem: map
     }

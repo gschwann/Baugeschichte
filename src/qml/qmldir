@@ -14,6 +14,7 @@ LoadIndicator 1.0 LoadIndicator.qml
 main 1.0 main.qml
 MapComponent 1.0 MapComponent.qml
 MapScale 1.0 MapScale.qml
+MapScaleZoom 1.0 MapScaleZoom.qml
 PositionIndicator 1.0 PositionIndicator.qml
 RouteLine 1.0 RouteLine.qml
 RouteLoader 1.0 RouteLoader.qml

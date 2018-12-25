@@ -73,14 +73,14 @@ Item {
 
     visible: scaleText.text != "0 m"
 
-    height: scaleText.height * 2
+    height: scaleText.height * 1.8
     width: scaleImage.width
 
     Image {
         id: scaleImageLeft
         source: "qrc:/resources/scale_end.png"
         anchors.bottom: parent.bottom
-        anchors.right: scaleImage.left
+        anchors.right: parent.left
     }
     Image {
         id: scaleImage
@@ -97,6 +97,7 @@ Item {
     Text {
         id: scaleText
         anchors.centerIn: parent
+        anchors.verticalCenterOffset: -5
         color: "#004EAE"
         text: "0 m"
     }
