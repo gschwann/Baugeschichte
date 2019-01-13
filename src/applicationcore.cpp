@@ -100,8 +100,7 @@ ApplicationCore::ApplicationCore(QObject* parent)
     context->setContextProperty(QStringLiteral("categoryLoader"), m_categoryLoader);
     context->setContextProperty(QStringLiteral("mainView"), m_view);
 
-    connect(m_markerLoader, SIGNAL(newHousetrail(QVector<HouseMarker>)), m_houseMarkerModel,
-        SLOT(append(QVector<HouseMarker>)));
+    connect(m_markerLoader, &MarkerLoader::newHousetrail, m_houseMarkerModel, &HouseMarkerModel::append);
 
     connect(m_categoryLoader, &CategoryLoader::newHousetrail, m_categoryMarkerModel, &HouseMarkerModel::append);
 
