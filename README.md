@@ -14,7 +14,7 @@ and also contain images and descriptions. It makes use of the Wikimedia API.
 For building the Andoird use src/src.pro as the project.
 
 For MapBoxGL support openssl is needed (Google removed it since Android 7?)
-Best use [https://github.com/ekke/android-openssl-qt](https://github.com/ekke/android-openssl-qt)
+Best use [https://github.com/akontsevich/openssl-android-build](https://github.com/akontsevich/openssl-android-build)
 
 This repo is cloned/built next to Baugeschichte.
 

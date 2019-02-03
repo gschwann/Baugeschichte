@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QGuiApplication>
 #include <QLocale>
+#include <QSslSocket>
 #include <QString>
 #include <QTranslator>
 #include <QtGlobal>
@@ -70,6 +71,13 @@ int main(int argc, char* argv[])
         &app, &QGuiApplication::applicationStateChanged, &appCore, &ApplicationCore::handleApplicationStateChange);
 
     appCore.showView();
+
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "QSslSocket::sslLibraryBuildVersionNumber()" << QSslSocket::sslLibraryBuildVersionNumber();
+    qDebug() << "QSslSocket::sslLibraryBuildVersionString()" << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "QSslSocket::sslLibraryVersionNumber()" << QSslSocket::sslLibraryVersionNumber();
+    qDebug() << "QSslSocket::sslLibraryVersionString()" << QSslSocket::sslLibraryVersionString();
+    qDebug() << "QSslSocket::supportsSsl()" << QSslSocket::supportsSsl();
 
     return app.exec();
 }

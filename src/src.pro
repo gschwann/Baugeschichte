@@ -5,14 +5,18 @@ TARGET = Baugeschichte
 QT += qml quick location positioning concurrent sensors svg xml sql
 android {
     QT += androidextras
-    contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-        ANDROID_EXTRA_LIBS += $$PWD/../../android-openssl-qt/prebuilt/armeabi-v7a/libcrypto.so
-        ANDROID_EXTRA_LIBS += $$PWD/../../android-openssl-qt/prebuilt/armeabi-v7a/libssl.so
+
+    equals(ANDROID_TARGET_ARCH, arm64-v8a) {
+        LIBPATH = $$absolute_path($$PWD/../../openssl-android-build/libs/android/clang/arm64-v8a)
     }
-    contains(ANDROID_TARGET_ARCH,x86) {
-        ANDROID_EXTRA_LIBS += $$PWD/../../android-openssl-qt/prebuilt/x86/libcrypto.so
-        ANDROID_EXTRA_LIBS += $$PWD/../../android-openssl-qt/prebuilt/x86/libssl.so
+
+    equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
+        LIBPATH = $$absolute_path($$PWD/../../openssl-android-build/libs/android/clang/armeabi-v7a)
     }
+
+    ANDROID_EXTRA_LIBS += \
+        $$LIBPATH/libssl.so \
+        $$LIBPATH/libcrypto.so
 }
 ios {
     QMAKE_INFO_PLIST = $$PWD/iOS/Info.plist
