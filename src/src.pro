@@ -35,6 +35,7 @@ ios {
 
 
 CONFIG += c++11
+CONFIG += qtquickcompiler
 
 RESOURCES += qml.qrc \
     images.qrc \
