@@ -9,7 +9,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>Created by Qt/QMake</string>
 	<key>CFBundleIdentifier</key>
-	<string>at.bitschmiede.grazwiki</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleName</key>
 	<string>Baugeschichte</string>
 	<key>CFBundlePackageType</key>
