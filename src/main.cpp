@@ -72,12 +72,5 @@ int main(int argc, char* argv[])
 
     appCore.showView();
 
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "QSslSocket::sslLibraryBuildVersionNumber()" << QSslSocket::sslLibraryBuildVersionNumber();
-    qDebug() << "QSslSocket::sslLibraryBuildVersionString()" << QSslSocket::sslLibraryBuildVersionString();
-    qDebug() << "QSslSocket::sslLibraryVersionNumber()" << QSslSocket::sslLibraryVersionNumber();
-    qDebug() << "QSslSocket::sslLibraryVersionString()" << QSslSocket::sslLibraryVersionString();
-    qDebug() << "QSslSocket::supportsSsl()" << QSslSocket::supportsSsl();
-
     return app.exec();
 }
