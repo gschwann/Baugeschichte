@@ -47,10 +47,15 @@ FocusScope {
     property string text: input.text != "" ? input.text : input.preeditText
     property alias hint: hintText.text
     property alias prefix: prefix.text
+    property alias inputText: input.text
 
     signal accepted
 
     height: Theme.buttonHeight
+
+    function setFocus() {
+        input.forceActiveFocus();
+    }
 
     Rectangle {
         id: background
@@ -75,7 +80,7 @@ FocusScope {
             text: qsTr("Enter word")
             font.pixelSize: Theme.smallFontSize
             color: "#707070"
-            visible: input.length === 0 && !input.activeFocus
+            visible: root.text == ""
         }
 
         Text {
@@ -84,7 +89,7 @@ FocusScope {
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: Theme.largeFontSize
             color: "#707070"
-            opacity: !hintText.opacity
+            visible: !hintText.visible
         }
 
         TextInput {

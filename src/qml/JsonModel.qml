@@ -45,6 +45,11 @@ Item {
     signal isLoaded
     signal newobject(var magneto)
 
+    function clear() {
+        jsonModel.clear();
+        internal.error = "";
+    }
+
     onPhraseChanged: {
         internal.reload();
     }
@@ -63,8 +68,7 @@ Item {
         }
 
         function reload() {
-            model.clear();
-            error = "";
+            root.clear();
 
             if (phrase == "") {
                 return;

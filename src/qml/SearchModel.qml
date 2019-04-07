@@ -29,6 +29,11 @@ import "./"
 
 JsonModel {
     id: root
+
+    // Even "unlimited" results show only 100 items - bot protection of the server
+    property bool limitResults: true
+    onLimitResultsChanged: console.log("limitResults:" + limitResults)
+
     onNewobject: {
         if (magneto.length < 2) {
             console.warn("Wrong search result from " + searchString + " : " + magneto);
@@ -49,9 +54,9 @@ JsonModel {
         }
     }
 
-    property string __url: "http://baugeschichte.at/api.php?action=opensearch&"
-    property string __format: "format=json&formatversion=2"
-    property string __namespace: "&namespace=0"
-    property string __resultLimit: "&limit=20"
-    searchString: __url + __format + __namespace + "&search="
+    readonly property string __url: "http://baugeschichte.at/api.php?action=opensearch&"
+    readonly property string __format: "format=json&formatversion=2"
+    readonly property string __namespace: "&namespace=0"
+    readonly property string __resultLimit: "&limit=" + (limitResults ? "20" : "100")
+    searchString: __url + __format + __namespace + __resultLimit + "&search="
 }

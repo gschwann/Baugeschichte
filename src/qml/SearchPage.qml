@@ -28,6 +28,8 @@ import QtQuick 2.4
 import "./"
 
 BaseView {
+    id: root
+
     loading: searchModel.isLoading
 
     SearchModel {
@@ -39,7 +41,8 @@ BaseView {
         width: parent.width
         hint: qsTr("Address ...")
         onTextChanged: {
-            searchModel.phrase = "";
+            resultLimitReset.start();
+            searchModel.clear();
             searchModel.phrase = text;
         }
     }
@@ -65,8 +68,8 @@ BaseView {
                     appCore.centerSelectedHouse();
                     uiStack.pop(null);
                 } else {
-                    searchInput.text = title;
-                    searchModel.phrase = title;
+                    searchModel.limitResults = false;
+                    searchInput.inputText = title;
                 }
             }
         }
@@ -82,8 +85,23 @@ BaseView {
         wrapMode: Text.Wrap
     }
 
+    Timer {
+        id: resultLimitReset
+        interval: 20
+        onTriggered: {
+            if (searchInput.text == "")
+                searchModel.limitResults = true;
+        }
+    }
+
+    Timer {
+        id: focusTimer
+        interval: 20
+        onTriggered: {
+            searchInput.forceActiveFocus();
+        }
+    }
     Component.onCompleted: {
-        searchInput.forceActiveFocus();
+        focusTimer.start();
     }
 }
-
