@@ -266,18 +266,26 @@ BaseView {
         Image {
             id: languageSwitch
             anchors {
-                bottom: parent.bottom;
+                verticalCenter: parent.verticalCenter
                 horizontalCenter: parent.horizontalCenter;
-                margins: 10
             }
             width: height
-            height: Theme.buttonHeight
+            height: Math.min(Theme.buttonHeight, parent.height)
 
             source: mainListView.model === detailsModel.modelDE ? "qrc:/resources/Flag_of_Germany.png" :
                                                  mainListView.model === detailsModel.modelEN ? "qrc:/resources/Flag_of_United_Kingdom.png"
                                                                             : ""
 
             visible: twoOrMoreLanguages()
+
+            Rectangle {
+                id: border
+                anchors.fill: parent
+                color: "transparent"
+                border.width: 2
+                border.color: "lightgray"
+                visible: appCore.detailsLanguage !== "EN" && appCore.detailsLanguage !== "DE"
+            }
 
             Text {
                 anchors.centerIn: parent
@@ -316,7 +324,7 @@ BaseView {
 
                     if (mainListView.model === detailsModel.modelS1) {
                         if (detailsModel.modelDE.count > 0) {
-                            rmainListView.model = detailsModel.modelDE;
+                            mainListView.model = detailsModel.modelDE;
                             appCore.detailsLanguage = "DE";
                             return;
                         }
