@@ -135,9 +135,11 @@ QString ApplicationCore::mapProvider() const
     static QVariant defaultProvider = QVariant("osm");
 #else
     static QVariant defaultProvider = QVariant("mapboxGl");
-    if (QSslSocket::sslLibraryVersionString().startsWith("OpenSSL 1.0.1e")) {
+    const QString sslVersion = QSslSocket::sslLibraryVersionString();
+    if (sslVersion.startsWith("OpenSSL") && sslVersion.mid(8, 6) == "1.0.1e") {
         // An old system version of ssl is used?
         // Use MapBox, as this does not use SSL
+        qDebug() << "Old SSL version using Mapbox as map provider";
         defaultProvider = QVariant("mapbox");
     }
 #endif
