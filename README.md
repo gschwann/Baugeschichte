@@ -20,4 +20,7 @@ This repo is cloned/built next to Baugeschichte.
 
 Another guide is in [http://doc.qt.io/qt-5/opensslsupport.html](http://doc.qt.io/qt-5/opensslsupport.html)
 
+Another source is https://github.com/KDAB/android_openssl (pre-builds
+already)
+
 ### iOS
