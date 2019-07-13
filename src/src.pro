@@ -7,17 +7,33 @@ android {
     QT += androidextras
 
     equals(ANDROID_TARGET_ARCH, arm64-v8a) {
-        LIBPATH = $$absolute_path($$PWD/../../openssl-android-build/libs/android/clang/arm64-v8a)
+        LIBPATH = $$absolute_path($$OUT_PWD/openssl-android/arm64-v8a)
+        !exists($$LIBPATH/libssl_1_1.so) {
+            system("mkdir -p $$LIBPATH")
+            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libssl_1_1.so")
+            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libcrypto_1_1.so")
+        }
     }
 
     equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
-        LIBPATH = $$absolute_path($$PWD/../../openssl-android-build/libs/android/clang/armeabi-v7a)
+        LIBPATH = $$absolute_path($$OUT_PWD/openssl-android/armeabi-v7a)
+        !exists($$LIBPATH/libssl_1_1.so) {
+            system("mkdir -p $$LIBPATH")
+            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm/libssl_1_1.so")
+            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm/libcrypto_1_1.so")
+        }
     }
+
+    # correct ssl lib filenames
+    system("cd $$LIBPATH && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
 
     ANDROID_EXTRA_LIBS += \
         $$LIBPATH/libssl.so \
-        $$LIBPATH/libcrypto.so
+        $$LIBPATH/libcrypto.so \
+        $$LIBPATH/libssl_1_1.so \
+        $$LIBPATH/libcrypto_1_1.so
 }
+
 ios {
     QMAKE_INFO_PLIST = $$PWD/iOS/Info.plist
     BUNDLEID = at.bitschmiede.grazwiki

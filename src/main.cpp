@@ -48,6 +48,13 @@ int main(int argc, char* argv[])
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName(QStringLiteral("Baugeschichte.at"));
 
+    qDebug() << Q_FUNC_INFO << "SSL version dump";
+    qDebug() << "QSslSocket::sslLibraryBuildVersionNumber()" << QSslSocket::sslLibraryBuildVersionNumber();
+    qDebug() << "QSslSocket::sslLibraryBuildVersionString()" << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "QSslSocket::sslLibraryVersionNumber()" << QSslSocket::sslLibraryVersionNumber();
+    qDebug() << "QSslSocket::sslLibraryVersionString()" << QSslSocket::sslLibraryVersionString();
+    qDebug() << "QSslSocket::supportsSsl()" << QSslSocket::supportsSsl();
+
     QTranslator appTranslator;
     bool ok = appTranslator.load(
         QLocale(), QStringLiteral("Baugeschichte"), QStringLiteral("_"), QStringLiteral(":/"), QStringLiteral(".qm"));
