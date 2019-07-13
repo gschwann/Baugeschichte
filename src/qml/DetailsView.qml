@@ -345,7 +345,7 @@ BaseView {
                 if (detailsModel.modelEN.count > 0) {
                     languages += 1;
                 }
-                if (detailsModel.modelEN.count > 0) {
+                if (detailsModel.modelS1.count > 0) {
                     languages += 1;
                 }
                 return languages >= 2;
