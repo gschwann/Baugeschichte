@@ -2,6 +2,8 @@ TEMPLATE = app
 
 TARGET = Baugeschichte
 
+VERSION = 2.1.6
+
 QT += qml quick location positioning concurrent sensors svg xml sql
 android {
     QT += androidextras
@@ -32,6 +34,22 @@ android {
         $$LIBPATH/libcrypto.so \
         $$LIBPATH/libssl_1_1.so \
         $$LIBPATH/libcrypto_1_1.so
+
+    defineReplace(droidVersionCode) {
+            segments = $$split(1, ".")
+            for (segment, segments): vCode = "$$first(vCode)$$format_number($$segment, width=3 zeropad)"
+
+            contains(ANDROID_TARGET_ARCH, arm64-v8a): \
+                suffix = 1
+            else:contains(ANDROID_TARGET_ARCH, armeabi-v7a): \
+                suffix = 0
+            # add more cases as needed
+
+            return($$first(vCode)$$first(suffix))
+    }
+
+    ANDROID_VERSION_NAME = $$VERSION
+    ANDROID_VERSION_CODE = $$droidVersionCode($$ANDROID_VERSION_NAME)
 }
 
 ios {
