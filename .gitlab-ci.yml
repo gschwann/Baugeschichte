@@ -6,4 +6,8 @@ stages:
 build:
   stage: build
   script:
-    - ./script/buildAndroid.sh
+    - ./scripts/buildAndroid.sh
+  artifacts:
+    paths:
+      - build/apk
+    expire_in: 15 week
