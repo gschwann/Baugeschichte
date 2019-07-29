@@ -1,0 +1,9 @@
+image: registry.gitlab.com/gschwann/qtandroiddocker:latest
+
+stages:
+- build
+
+build:
+  stage: build
+  script:
+    - ./script/buildAndroid.sh

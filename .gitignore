@@ -1,3 +1,6 @@
+# build
+build/*
+
 # C++ objects and libs
 *.slo
 *.lo
@@ -43,3 +46,6 @@ translations/*.qm
 parts
 prime
 stage
+
+# Desktop files
+.directory
