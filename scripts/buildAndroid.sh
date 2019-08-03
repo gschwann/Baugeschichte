@@ -28,6 +28,49 @@ export ANDROID_NDK_HOST=linux-x86_64
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 export JAVA_HOME=$JDK
 
+runQmake() {
+    QMAKE_BIN=$1
+    echo ">> $QMAKE_BIN -o Makefile $SOURCE_DIR/src/src.pro -spec android-clang CONFIG+=qtquickcompiler"
+    $QMAKE_BIN $SOURCE_DIR/src/src.pro -o Makefile -spec android-clang CONFIG+=qtquickcompiler
+    if [ $? -ne 0 ]; then
+    echo "Error building Baugeschichte"
+    exit 1
+    fi
+}
+
+runMake() {
+    MAKE=$ANDROID_NDK_ROOT/prebuilt/linux-x86_64/bin/make
+    echo ">> $MAKE -f Makefile"
+    $MAKE -f Makefile
+    if [ $? -ne 0 ]; then
+    echo "Error building Baugeschichte"
+    exit 1
+    fi
+}
+
+runMakeInstall() {
+    BUILD_DIR=$1
+    echo ">> $MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install"
+    $MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install
+    if [ $? -ne 0 ]; then
+    echo "Error building Baugeschichte"
+    exit 1
+    fi
+}
+
+createAPK() {
+    BUILD_DIR=$1
+    DEPLOY_TOOL=$2
+    SETTING=$BUILD_DIR/android-libBaugeschichte.so-deployment-settings.json
+    echo ">> $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release"
+    $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release
+    if [ $? -ne 0 ]; then
+    echo "Error building Baugeschichte"
+    exit 1
+    fi
+}
+
+
 #
 # build ARM 32 bit
 #
@@ -37,38 +80,10 @@ mkdir -p $BUILD_DIR
 mkdir -p $TARGET_DIR
 cd $BUILD_DIR
 
-QMAKE=$QT_DIR/android_armv7/bin/qmake
-# call qmake
-echo ">> $QMAKE -o Makefile $SOURCE_DIR/src/src.pro -spec android-clang CONFIG+=qtquickcompiler"
-$QMAKE $SOURCE_DIR/src/src.pro -o Makefile -spec android-clang CONFIG+=qtquickcompiler
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
-
-MAKE=$ANDROID_NDK_ROOT/prebuilt/linux-x86_64/bin/make
-# build & install
-echo ">> $MAKE -f Makefile"
-$MAKE -f Makefile
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
-echo ">> $MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install"
-$MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
-# create the apk
-DEPLOY_TOOL=$QT_DIR/android_armv7/bin/androiddeployqt
-SETTING=$BUILD_DIR/android-libBaugeschichte.so-deployment-settings.json
-echo ">> $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release"
-$DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
+runQmake $QT_DIR/android_armv7/bin/qmake
+runMake
+runMakeInstall $BUILD_DIR
+createAPK $BUILD_DIR $QT_DIR/android_armv7/bin/androiddeployqt
 
 # copy file
 APK32=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.apk
@@ -88,39 +103,10 @@ rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 
-QMAKE=$QT_DIR/android_arm64_v8a/bin/qmake
-# call qmake
-echo ">> $QMAKE -o Makefile $SOURCE_DIR/src/src.pro -spec android-clang CONFIG+=qtquickcompiler"
-$QMAKE -o Makefile $SOURCE_DIR/src/src.pro -spec android-clang CONFIG+=qtquickcompiler
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
- 
-MAKE=$ANDROID_NDK_ROOT/prebuilt/linux-x86_64/bin/make
-# build & install
-echo ">> $MAKE -f Makefile"
-$MAKE -f Makefile
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
-echo ">> $MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install"
-$MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
-
-# create the apk
-DEPLOY_TOOL=$QT_DIR/android_arm64_v8a/bin/androiddeployqt
-SETTING=$BUILD_DIR/android-libBaugeschichte.so-deployment-settings.json
-echo ">> $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release"
-$DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release
-if [ $? -ne 0 ]; then
-  echo "Error building Baugeschichte"
-  exit 1
-fi
+runQmake $QT_DIR/android_arm64_v8a/bin/qmake
+runMake
+runMakeInstall $BUILD_DIR
+createAPK $BUILD_DIR $QT_DIR/android_armv7/bin/androiddeployqt
 
 # copy file
 APK64=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.apk
