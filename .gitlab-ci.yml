@@ -6,7 +6,9 @@ stages:
 build:
   stage: build
   script:
+    - echo "$KEYSTORE_FILE" > GrazWikiKeyStore.jks
     - ./scripts/buildAndroid.sh
+    - rm GrazWikiKeyStore.jks
   artifacts:
     paths:
       - build/apk

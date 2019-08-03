@@ -20,11 +20,6 @@ TARGET_DIR=$BUILD_BASE/apk
 
 JDK=/usr/lib/jvm/java-8-openjdk-amd64
 
-# Store Google store key file - saved in Gitlab CI settings
-if [ ! -z "$KEYSTORE_FILE" ]; then
-    echo "$KEYSTORE_FILE" > "$SOURCE_DIR/GrazWikiKeyStore.jks"
-fi
-
 SIGN_OPTIONS=
 ANDROID_KEYSTORE=$SOURCE_DIR/GrazWikiKeyStore.jks
 if [ -f "$ANDROID_KEYSTORE" ]; then 
@@ -37,8 +32,10 @@ else
 fi
 
 # Google keystore password - saved in Gitlab CI settings
-if [ ! -z "$GRAZWIKI_PASSWORD" ]; then
-    SIGN_OPTIONS="$SIGN_OPTIONS --storepass $GRAZWIKI_PASSWORD"
+if [ ! -z "$SIGN_OPTIONS" ]; then
+    if [ ! -z "$GRAZWIKI_PASSWORD" ]; then
+        SIGN_OPTIONS="$SIGN_OPTIONS --storepass $GRAZWIKI_PASSWORD"
+    fi
 fi
 
 SIGN_STATUS="unsigned"
