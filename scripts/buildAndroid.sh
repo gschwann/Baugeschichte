@@ -37,7 +37,7 @@ else
 fi
 
 # Google keystore password - saved in Gitlab CI settings
-if [ -z "$GRAZWIKI_PASSWORD" }; then
+if [ ! -z "$GRAZWIKI_PASSWORD" ]; then
     SIGN_OPTIONS="$SIGN_OPTIONS --storepass $GRAZWIKI_PASSWORD"
 fi
 
