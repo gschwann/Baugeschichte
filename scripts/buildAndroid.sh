@@ -20,7 +20,31 @@ TARGET_DIR=$BUILD_BASE/apk
 
 JDK=/usr/lib/jvm/java-8-openjdk-amd64
 
+# Store Google store key file - saved in Gitlab CI settings
+if [ ! -z "$KEYSTORE_FILE" ]; then
+    echo "$KEYSTORE_FILE" > "$SOURCE_DIR/GrazWikiKeyStore.jks"
+fi
 
+SIGN_OPTIONS=
+ANDROID_KEYSTORE=$SOURCE_DIR/GrazWikiKeyStore.jks
+if [ -f "$ANDROID_KEYSTORE" ]; then 
+    SIGN_OPTIONS="--sign $ANDROID_KEYSTORE grazwiki"
+else
+    ANDROID_KEYSTORE=$SOURCE_DIR/../GrazWikiKeyStore.jks
+    if [ -f "$ANDROID_KEYSTORE" ]; then 
+        SIGN_OPTIONS="--sign $ANDROID_KEYSTORE grazwiki"
+    fi
+fi
+
+# Google keystore password - saved in Gitlab CI settings
+if [ -z "$GRAZWIKI_PASSWORD" }; then
+    SIGN_OPTIONS="$SIGN_OPTIONS --storepass $GRAZWIKI_PASSWORD"
+fi
+
+SIGN_STATUS="unsigned"
+if [ ! -z "$SIGN_OPTIONS" ]; then
+    SIGN_STATUS="google_signed"
+fi
 TIMESTAMP=`date +%Y%m%d`
 
 # setup some enviroment variables
@@ -62,8 +86,8 @@ createAPK() {
     BUILD_DIR=$1
     DEPLOY_TOOL=$2
     SETTING=$BUILD_DIR/android-libBaugeschichte.so-deployment-settings.json
-    echo ">> $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release"
-    $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release
+    echo ">> $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release ..."
+    $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release $SIGN_OPTIONS
     if [ $? -ne 0 ]; then
     echo "Error building Baugeschichte"
     exit 1
@@ -87,7 +111,10 @@ createAPK $BUILD_DIR $QT_DIR/android_armv7/bin/androiddeployqt
 
 # copy file
 APK32=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.apk
-DESTINATION32=$TARGET_DIR/Baugeschichte_signed_arm32_$TIMESTAMP.apk
+if [ ! -z "$SIGN_OPTIONS" ]; then
+   APK32=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-signed.apk
+fi
+DESTINATION32=$TARGET_DIR/Baugeschichte_$SIGN_STATUS_arm32_$TIMESTAMP.apk
 cp $APK32 $DESTINATION32
 if [ $? -ne 0 ]; then
   echo "Error building Baugeschichte"
@@ -110,7 +137,10 @@ createAPK $BUILD_DIR $QT_DIR/android_armv7/bin/androiddeployqt
 
 # copy file
 APK64=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.apk
-DESTINATION64=$TARGET_DIR/Baugeschichte_signed_arm64_$TIMESTAMP.apk
+if [ ! -z "$SIGN_OPTIONS" ]; then
+   APK64=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-signed.apk
+fi
+DESTINATION64=$TARGET_DIR/Baugeschichte_$SIGN_STATUS_arm64_$TIMESTAMP.apk
 cp $APK64 $DESTINATION64
 if [ $? -ne 0 ]; then
   echo "Error building Baugeschichte"
