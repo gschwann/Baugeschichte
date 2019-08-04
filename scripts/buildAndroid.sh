@@ -2,8 +2,6 @@
 
 QT_DIR=/opt/Qt/5.12.4
 PLATFORM=android-28
-NDK_PLATFORM_32BIT=android-28
-NDK_PLATFORM_64BIT=android-28
 
 if [ -z "$ANDROID_NDK_ROOT" ]; then
     echo "Need to set environment variable ANDROID_NDK_ROOT"
@@ -70,9 +68,9 @@ runMake() {
 }
 
 runMakeInstall() {
-    BUILD_DIR=$1
-    echo ">> $MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install"
-    $MAKE INSTALL_ROOT=$BUILD_DIR/android-build -f Makefile install
+    ANDROID_BUILD_DIR=$1/android-build
+    echo ">> $MAKE INSTALL_ROOT=$ANDROID_BUILD_DIR -f Makefile install"
+    $MAKE INSTALL_ROOT=$ANDROID_BUILD_DIR -f Makefile install
     if [ $? -ne 0 ]; then
     echo "Error building Baugeschichte"
     exit 1
@@ -80,11 +78,11 @@ runMakeInstall() {
 }
 
 createAPK() {
-    BUILD_DIR=$1
+    ANDROID_BUILD_DIR=$1/android-build
     DEPLOY_TOOL=$2
     SETTING=$BUILD_DIR/android-libBaugeschichte.so-deployment-settings.json
-    echo ">> $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release ..."
-    $DEPLOY_TOOL --input $SETTING --output $BUILD_DIR/android-build --android-platform $PLATFORM --jdk $JDK --gradle --release $SIGN_OPTIONS
+    echo ">> $DEPLOY_TOOL --input $SETTING --output $ANDROID_BUILD_DIR --android-platform $PLATFORM --jdk $JDK --gradle --release ..."
+    $DEPLOY_TOOL --input $SETTING --output $ANDROID_BUILD_DIR --android-platform $PLATFORM --jdk $JDK --gradle --release $SIGN_OPTIONS
     if [ $? -ne 0 ]; then
     echo "Error building Baugeschichte"
     exit 1
@@ -130,7 +128,7 @@ cd $BUILD_DIR
 runQmake $QT_DIR/android_arm64_v8a/bin/qmake
 runMake
 runMakeInstall $BUILD_DIR
-createAPK $BUILD_DIR $QT_DIR/android_armv7/bin/androiddeployqt
+createAPK $BUILD_DIR $QT_DIR/android_arm64_v8a/bin/androiddeployqt
 
 # copy file
 APK64=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.apk
