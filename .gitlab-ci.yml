@@ -6,7 +6,8 @@ stages:
 build:
   stage: build
   script:
-    - echo "$KEYSTORE_FILE" > GrazWikiKeyStore.jks
+    # Decode the keystore file (encrypted via "openssl base64 -A -in GrazWikiKeyStore.jks")
+    - echo "$KEYSTORE_FILE" | base64 --decode > GrazWikiKeyStore.jks
     - ./scripts/buildAndroid.sh
     - rm GrazWikiKeyStore.jks
   artifacts:
