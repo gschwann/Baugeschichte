@@ -18,6 +18,8 @@ TARGET_DIR=$BUILD_BASE/apk
 
 JDK=/usr/lib/jvm/java-8-openjdk-amd64
 
+VERSION=`awk /^VERSION/ src/src.pro | sed s/VERSION=//g`
+
 SIGN_OPTIONS=
 ANDROID_KEYSTORE=$SOURCE_DIR/GrazWikiKeyStore.jks
 if [ -f "$ANDROID_KEYSTORE" ]; then 
@@ -109,7 +111,7 @@ APK32=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.
 if [ ! -z "$SIGN_OPTIONS" ]; then
    APK32=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-signed.apk
 fi
-DESTINATION32=$TARGET_DIR/Baugeschichte_$SIGN_STATUS\_arm32_$TIMESTAMP.apk
+DESTINATION32=$TARGET_DIR/Baugeschichte_$VERSION-$SIGN_STATUS\_arm32_$TIMESTAMP.apk
 cp $APK32 $DESTINATION32
 if [ $? -ne 0 ]; then
   echo "Error building Baugeschichte"
@@ -135,7 +137,7 @@ APK64=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-unsigned.
 if [ ! -z "$SIGN_OPTIONS" ]; then
    APK64=$BUILD_DIR/android-build/build/outputs/apk/android-build-release-signed.apk
 fi
-DESTINATION64=$TARGET_DIR/Baugeschichte_$SIGN_STATUS\_arm64_$TIMESTAMP.apk
+DESTINATION64=$TARGET_DIR/Baugeschichte_$VERSION-$SIGN_STATUS\_arm64_$TIMESTAMP.apk
 cp $APK64 $DESTINATION64
 if [ $? -ne 0 ]; then
   echo "Error building Baugeschichte"
