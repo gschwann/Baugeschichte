@@ -8,6 +8,7 @@
         <file>qml/ImageCarousel.qml</file>
         <file>qml/JsonModel.qml</file>
         <file>qml/LineInput.qml</file>
+        <file>qml/LineSeparator.qml</file>
         <file>qml/LoadIndicator.qml</file>
         <file>qml/main.qml</file>
         <file>qml/MapComponent.qml</file>

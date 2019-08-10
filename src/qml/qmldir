@@ -10,6 +10,7 @@ DetailsView 1.0 DetailsView.qml
 ImageCarousel 1.0 ImageCarousel.qml
 JsonModel 1.0 JsonModel.qml
 LineInput 1.0 LineInput.qml
+LineSeparator 1.0 LineSeparator.qml
 LoadIndicator 1.0 LoadIndicator.qml
 main 1.0 main.qml
 MapComponent 1.0 MapComponent.qml

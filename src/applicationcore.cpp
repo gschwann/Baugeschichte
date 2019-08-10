@@ -286,6 +286,11 @@ void ApplicationCore::setExtraScaling(bool extraScaling)
     emit extraScalingChanged(m_extraScaling);
 }
 
+QString ApplicationCore::versionString() const
+{
+    return QApplication::applicationVersion();
+}
+
 void ApplicationCore::handleApplicationStateChange(Qt::ApplicationState state)
 {
     switch (state) {

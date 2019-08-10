@@ -4,6 +4,8 @@ TARGET = Baugeschichte
 
 VERSION = 2.1.6
 
+DEFINES += APP_VERSION='\'"$$VERSION"\''
+
 QT += qml quick location positioning concurrent sensors svg xml sql
 android {
     QT += androidextras
@@ -114,6 +116,7 @@ DISTFILES += \
     qml/ImageCarousel.qml \
     qml/JsonModel.qml \
     qml/LineInput.qml \
+    qml/LineSeparator.qml \
     qml/LoadIndicator.qml \
     qml/main.qml \
     qml/MapComponent.qml \
