@@ -58,6 +58,7 @@ class ApplicationCore : public QObject
     Q_PROPERTY(bool followPosition READ followPosition WRITE setFollowPosition NOTIFY followPositionChanged)
     Q_PROPERTY(QString detailsLanguage READ detailsLanguage WRITE setDetailsLanguage NOTIFY detailsLanguageChanged)
     Q_PROPERTY(bool extraScaling READ extraScaling WRITE setExtraScaling NOTIFY extraScalingChanged)
+    Q_PROPERTY(QString versionString READ versionString CONSTANT)
     Q_OBJECT
 public:
     explicit ApplicationCore(QObject* parent = nullptr);
@@ -99,6 +100,8 @@ public:
 
     bool extraScaling() const;
     void setExtraScaling(bool extraScaling);
+
+    QString versionString() const;
 
 public slots:
     void handleApplicationStateChange(Qt::ApplicationState state);

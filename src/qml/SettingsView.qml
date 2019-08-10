@@ -26,6 +26,7 @@
 
 import QtQuick 2.5
 import QtQuick.Controls 2.0
+import Baugeschichte 1.0
 
 Item {
     id: root
@@ -44,6 +45,7 @@ Item {
     Column {
         x: spacing
         y: spacing
+        width: parent.width
         spacing: mapText.height / 4
 
         Text {
@@ -70,6 +72,13 @@ Item {
             }
         }
 
+        Text {
+            width: parent.width
+            color: "gray"
+            text: qsTr("The app might crash, and needs to be restarted to work.")
+            wrapMode: Text.WordWrap
+        }
+
         CheckBox {
             id: extraScaleItem
             text: qsTr("Do extra scaling")
@@ -79,10 +88,14 @@ Item {
             }
         }
 
-        Item {
-            id: dummyItem
-            width: 10
-            height: 10
+        LineSeparator {
+        }
+
+        Text {
+            text: qsTr("Version: ") + appCore.versionString
+        }
+
+        LineSeparator {
         }
 
         Button {

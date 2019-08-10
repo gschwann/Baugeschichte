@@ -44,6 +44,9 @@ int main(int argc, char* argv[])
     QCoreApplication::setOrganizationName("GrazWiki");
     QCoreApplication::setOrganizationDomain("baugeschichte.at");
     QCoreApplication::setApplicationName("Baugeschichte");
+#ifndef Q_OS_ANDROID
+    QCoreApplication::setApplicationVersion(APP_VERSION);
+#endif
 
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName(QStringLiteral("Baugeschichte.at"));
