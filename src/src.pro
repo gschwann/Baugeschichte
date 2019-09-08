@@ -71,6 +71,10 @@ ios {
     QMAKE_IOS_DEPLOYMENT_TARGET = 11.0
     # Note for devices: 1=iPhone, 2=iPad, 1,2=Universal.
     QMAKE_APPLE_TARGETED_DEVICE_FAMILY = 1,2
+
+    # Workaround for
+    # https://bugreports.qt.io/browse/QTBUG-73680
+    CONFIG -= bitcode
 }
 
 
