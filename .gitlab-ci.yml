@@ -1,4 +1,4 @@
-image: registry.gitlab.com/gschwann/qtandroiddocker:latest
+image: registry.gitlab.com/vikingsoftware/qt5.14.1androiddocker:latest
 
 stages:
 - build

@@ -1,5 +1,5 @@
-!versionAtLeast(QT_VERSION, "5.12.4") {
-    warning("Qt 5.12.4 or above is required.")
+!versionAtLeast(QT_VERSION, "5.14.1") {
+    warning("Qt 5.14.1 or above is required.")
 }
 
 TEMPLATE = subdirs
