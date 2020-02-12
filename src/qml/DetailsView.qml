@@ -128,6 +128,7 @@ BaseView {
         }
 
         model: detailsModel.imagesModel
+        onModelChanged: console.log("model:" + model)
 
         onCurrentIndexChanged: {
             if (currentIndex < 0 || currentIndex >= detailsModel.imagesModel.count) {
