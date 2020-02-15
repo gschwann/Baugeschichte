@@ -63,16 +63,14 @@ ListView {
         width: root.width
         height: root.height
 
-        Image {
+        SingleImageView {
             id:myImage
             width: parent.width
             height: parent.height
             source: imageUrl(imageName)
-            fillMode: Image.PreserveAspectFit
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             smooth: true
-            asynchronous: true
 
             function imageUrl(imageName) {
                 var isRemote = imageName.substring(0, 4) === "http";
@@ -82,6 +80,10 @@ ListView {
                     var url = "http://baugeschichte.at/" + imageName;
                     return url;
                 }
+            }
+
+            onZoomedChanged: {
+                root.interactive = !zoomed;
             }
 
             Text {

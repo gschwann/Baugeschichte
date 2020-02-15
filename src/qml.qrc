@@ -24,6 +24,7 @@
         <file>qml/SearchResultDelegate.qml</file>
         <file>qml/SettingsView.qml</file>
         <file>qml/ShutDownDialog.qml</file>
+        <file>qml/SingleImageView.qml</file>
         <file>qml/SizeTracer.qml</file>
         <file>qml/Theme.qml</file>
         <file>qml/ToolbarButton.qml</file>

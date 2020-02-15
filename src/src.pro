@@ -2,7 +2,8 @@ TEMPLATE = app
 
 TARGET = Baugeschichte
 
-VERSION=2.1.7
+# No spaces here - for the android build script
+VERSION=2.2.0
 
 DEFINES += APP_VERSION='\'"$$VERSION"\''
 
@@ -11,31 +12,36 @@ android {
     QT += androidextras
 
     equals(ANDROID_TARGET_ARCH, arm64-v8a) {
-        LIBPATH = $$absolute_path($$OUT_PWD/openssl-android/arm64-v8a)
-        !exists($$LIBPATH/libssl_1_1.so) {
-            system("mkdir -p $$LIBPATH")
-            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libssl_1_1.so")
-            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libcrypto_1_1.so")
+        LIBPATH64 = $$absolute_path($$OUT_PWD/openssl-android/arm64-v8a)
+        !exists($$LIBPATH64/libssl_1_1.so) {
+            system("mkdir -p $$LIBPATH64")
+            system("cd $$LIBPATH64 && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libssl_1_1.so")
+            system("cd $$LIBPATH64 && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libcrypto_1_1.so")
+            # correct ssl lib filenames
+            system("cd $$LIBPATH64 && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
         }
+        ANDROID_EXTRA_LIBS += \
+            $$LIBPATH64/libssl.so \
+            $$LIBPATH64/libcrypto.so \
+            $$LIBPATH64/libssl_1_1.so \
+            $$LIBPATH64/libcrypto_1_1.so
     }
 
     equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
-        LIBPATH = $$absolute_path($$OUT_PWD/openssl-android/armeabi-v7a)
-        !exists($$LIBPATH/libssl_1_1.so) {
-            system("mkdir -p $$LIBPATH")
-            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm/libssl_1_1.so")
-            system("cd $$LIBPATH && wget https://github.com/KDAB/android_openssl/raw/master/arm/libcrypto_1_1.so")
+        LIBPATH32 = $$absolute_path($$OUT_PWD/openssl-android/armeabi-v7a)
+        !exists($$LIBPATH32/libssl_1_1.so) {
+            system("mkdir -p $$LIBPATH32")
+            system("cd $$LIBPATH32 && wget https://github.com/KDAB/android_openssl/raw/master/arm/libssl_1_1.so")
+            system("cd $$LIBPATH32 && wget https://github.com/KDAB/android_openssl/raw/master/arm/libcrypto_1_1.so")
+            # correct ssl lib filenames
+            system("cd $$LIBPATH32 && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
         }
+        ANDROID_EXTRA_LIBS += \
+            $$LIBPATH32/libssl.so \
+            $$LIBPATH32/libcrypto.so \
+            $$LIBPATH32/libssl_1_1.so \
+            $$LIBPATH32/libcrypto_1_1.so
     }
-
-    # correct ssl lib filenames
-    system("cd $$LIBPATH && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
-
-    ANDROID_EXTRA_LIBS += \
-        $$LIBPATH/libssl.so \
-        $$LIBPATH/libcrypto.so \
-        $$LIBPATH/libssl_1_1.so \
-        $$LIBPATH/libcrypto_1_1.so
 
     defineReplace(droidVersionCode) {
             segments = $$split(1, ".")
@@ -52,6 +58,8 @@ android {
 
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$droidVersionCode($$ANDROID_VERSION_NAME)
+
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 }
 
 ios {
@@ -71,21 +79,28 @@ ios {
     QMAKE_IOS_DEPLOYMENT_TARGET = 11.0
     # Note for devices: 1=iPhone, 2=iPad, 1,2=Universal.
     QMAKE_APPLE_TARGETED_DEVICE_FAMILY = 1,2
-
-    # Workaround for
-    # https://bugreports.qt.io/browse/QTBUG-73680
-    CONFIG -= bitcode
 }
 
-
-CONFIG += c++11
+CONFIG += c++14
 CONFIG += qtquickcompiler
+
+# The following define makes your compiler emit warnings if you use
+# any Qt feature that has been marked deprecated (the exact warnings
+# depend on your compiler). Refer to the documentation for the
+# deprecated API to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
+
+# You can also make your code fail to compile if it uses deprecated APIs.
+# In order to do so, uncomment the following line.
+# You can also select to disable deprecated APIs only up to a certain version of Qt.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 RESOURCES += qml.qrc \
     images.qrc \
     ../translations/translations.qrc
 
-SOURCES += main.cpp \
+SOURCES += \
+    main.cpp \
     houselocationfilter.cpp \
     applicationcore.cpp \
     markerloader.cpp \
@@ -105,45 +120,16 @@ HEADERS += \
 
 DISTFILES += \
     android/AndroidManifest.xml \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradlew \
-    android/res/values/libs.xml \
     android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat \
-    qml/qmldir \
-    qml/BaseView.qml \
-    qml/CategoryselectionView.qml \
-    qml/DetailsModel.qml \
-    qml/DetailsTextArea.qml \
-    qml/DetailsView.qml \
-    qml/ImageCarousel.qml \
-    qml/JsonModel.qml \
-    qml/LineInput.qml \
-    qml/LineSeparator.qml \
-    qml/LoadIndicator.qml \
-    qml/main.qml \
-    qml/MapComponent.qml \
-    qml/MapScale.qml \
-    qml/MapScaleZoom.qml \
-    qml/PositionIndicator.qml \
-    qml/RouteLine.qml \
-    qml/RouteLoader.qml \
-    qml/RouteView.qml \
-    qml/SearchModel.qml \
-    qml/SearchPage.qml \
-    qml/SearchResultDelegate.qml \
-    qml/SettingsView.qml \
-    qml/ShutDownDialog.qml \
-    qml/SizeTracer.qml \
-    qml/Theme.qml \
-    qml/ToolBar.qml \
-    qml/ToolBarButton.qml \
-
-ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    android/res/values/libs.xml
 
 include(deployment.pri)
 
+# Additional import path used to resolve QML modules in Qt Creator's code model
+QML_IMPORT_PATH =
+
+# Additional import path used to resolve QML modules just for Qt Quick Designer
+QML_DESIGNER_IMPORT_PATH =
 
 # Supported languages
 # qml sources
@@ -166,8 +152,8 @@ TRANSLATIONS += $$prependAll(LANGUAGES, $$PWD/../translations/$$tstarget, .ts)
 # run LRELEASE to generate the qm files
 qtPrepareTool(LRELEASE, lrelease)
 message($$TRANSLATIONS)
- for(tsfile, TRANSLATIONS) {
-     message($$tsfile)
-     command = $$LRELEASE $$tsfile
-     system($$command)|error("Failed to run: $$command")
- }
+for(tsfile, TRANSLATIONS) {
+    message($$tsfile)
+    command = $$LRELEASE $$tsfile
+    system($$command)|error("Failed to run: $$command")
+}
