@@ -48,7 +48,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
-#include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QSettings>
@@ -77,10 +76,19 @@ ApplicationCore::ApplicationCore(QObject* parent)
     , m_settings(new QSettings(this))
     , m_extraScaling(false)
 {
+    const char* qmlUri = "Baugeschichte";
+    const int major = 1;
+    const int minor = 0;
     qRegisterMetaType<HouseMarker>("HouseMarker");
     qRegisterMetaType<QVector<HouseMarker>>("QVector<HouseMarker>");
-    qmlRegisterType<HouseLocationFilter>("Baugeschichte", 1, 0, "HouseLocationFilter");
+    qmlRegisterType<HouseLocationFilter>(qmlUri, major, minor, "HouseLocationFilter");
     qmlRegisterUncreatableType<HouseMarkerModel>("HouseMarkerModel", 1, 0, "HouseMarkerModel", "");
+
+    // Register singletons
+    qmlRegisterSingletonInstance<ApplicationCore>(qmlUri, major, minor, "AppCore", this);
+    qmlRegisterSingletonInstance<MarkerLoader>(qmlUri, major, minor, "MarkerLoader", m_markerLoader);
+    qmlRegisterSingletonInstance<HouseMarkerModel>(qmlUri, major, minor, "HouseTrailModel", m_houseMarkerModel);
+    qmlRegisterSingletonInstance<CategoryLoader>(qmlUri, major, minor, "CategoryLoader", m_categoryLoader);
 
     m_extraScaling = m_settings->value("MapExtraScaling", false).toBool();
     QPointF lastPos = m_settings->value("CurrentMapPosition", QVariant::fromValue(QPointF(47.0667, 15.45))).toPointF();
@@ -93,12 +101,6 @@ ApplicationCore::ApplicationCore(QObject* parent)
 
     QQmlEngine* engine = m_view->engine();
     connect(engine, &QQmlEngine::quit, qApp, &QApplication::quit);
-    QQmlContext* context = engine->rootContext();
-    context->setContextProperty(QStringLiteral("appCore"), this);
-    context->setContextProperty(QStringLiteral("markerLoader"), m_markerLoader);
-    context->setContextProperty(QStringLiteral("houseTrailModel"), m_houseMarkerModel);
-    context->setContextProperty(QStringLiteral("categoryLoader"), m_categoryLoader);
-    context->setContextProperty(QStringLiteral("mainView"), m_view);
 
     connect(m_markerLoader, &MarkerLoader::newHousetrail, m_houseMarkerModel, &HouseMarkerModel::append);
 
@@ -108,6 +110,8 @@ ApplicationCore::ApplicationCore(QObject* parent)
         m_housePositionLoader, &QNetworkAccessManager::finished, this, &ApplicationCore::handleLoadedHouseCoordinates);
 
     loadMarkers();
+
+    connect(m_view, &MainWindow::backKeyPressed, this, &ApplicationCore::backKeyPressed);
 }
 
 ApplicationCore::~ApplicationCore()

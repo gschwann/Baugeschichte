@@ -38,6 +38,7 @@
 **
 ****************************************************************************/
 
+import Baugeschichte 1.0
 import QtQuick 2.4
 import QtQuick.Layouts 1.1
 import "./"
@@ -46,7 +47,7 @@ BaseView {
     id: root
 
     property real itemSize: width / 3
-    property string searchFor: appCore.selectedHouse
+    property string searchFor: AppCore.selectedHouse
     property string poiName: detailsModel.title
 
     property int animationDuration: 200 // ms
@@ -62,15 +63,15 @@ BaseView {
 
     function selectLanguage() {
         // get from last manual setting
-        if (appCore.detailsLanguage === "DE" && detailsModel.modelDE.count > 0) {
+        if (AppCore.detailsLanguage === "DE" && detailsModel.modelDE.count > 0) {
             mainListView.model = detailsModel.modelDE;
             return;
         }
-        if (appCore.detailsLanguage === "EN" && detailsModel.modelEN.count > 0) {
+        if (AppCore.detailsLanguage === "EN" && detailsModel.modelEN.count > 0) {
             mainListView.model = detailsModel.modelEN;
             return;
         }
-        if (appCore.detailsLanguage === "S1" && detailsModel.modelS1.count > 0) {
+        if (AppCore.detailsLanguage === "S1" && detailsModel.modelS1.count > 0) {
             mainListView.model = detailsModel.modelS1;
             return;
         }
@@ -285,7 +286,7 @@ BaseView {
                 color: "transparent"
                 border.width: 2
                 border.color: "lightgray"
-                visible: appCore.detailsLanguage !== "EN" && appCore.detailsLanguage !== "DE"
+                visible: AppCore.detailsLanguage !== "EN" && AppCore.detailsLanguage !== "DE"
             }
 
             Text {
@@ -300,12 +301,12 @@ BaseView {
                     if (mainListView.model === detailsModel.modelDE) {
                         if (detailsModel.modelEN.count > 0) {
                             mainListView.model = detailsModel.modelEN;
-                            appCore.detailsLanguage = "EN";
+                            AppCore.detailsLanguage = "EN";
                             return;
                         }
                         if (detailsModel.modelS1.count > 0) {
                             mainListView.model = detailsModel.modelS1;
-                            appCore.detailsLanguage = "S1";
+                            AppCore.detailsLanguage = "S1";
                             return;
                         }
                     }
@@ -313,12 +314,12 @@ BaseView {
                     if (mainListView.model === detailsModel.modelEN) {
                         if (detailsModel.modelS1.count > 0) {
                             mainListView.model = detailsModel.modelS1;
-                            appCore.detailsLanguage = "S1";
+                            AppCore.detailsLanguage = "S1";
                             return;
                         }
                         if (detailsModel.modelDE.count > 0) {
                             mainListView.model = detailsModel.modelDE;
-                            appCore.detailsLanguage = "DE";
+                            AppCore.detailsLanguage = "DE";
                             return;
                         }
                     }
@@ -326,12 +327,12 @@ BaseView {
                     if (mainListView.model === detailsModel.modelS1) {
                         if (detailsModel.modelDE.count > 0) {
                             mainListView.model = detailsModel.modelDE;
-                            appCore.detailsLanguage = "DE";
+                            AppCore.detailsLanguage = "DE";
                             return;
                         }
                         if (detailsModel.modelEN.count > 0) {
                             mainListView.model = detailsModel.modelEN;
-                            appCore.detailsLanguage = "EN";
+                            AppCore.detailsLanguage = "EN";
                             return;
                         }
                     }

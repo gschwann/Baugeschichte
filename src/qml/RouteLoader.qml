@@ -24,6 +24,7 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.4
 import QtPositioning 5.5
 import QtLocation 5.4
@@ -93,7 +94,7 @@ Item {
                                                       area.height * 1.1);
             }
 
-            appCore.routeKML = magneto.kml;
+            AppCore.routeKML = magneto.kml;
         }
         searchString: "http://baugeschichte.at/app/v1/getData.php?action=getRoutePoints&name="
 

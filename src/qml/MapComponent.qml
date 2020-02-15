@@ -24,13 +24,13 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.4
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.2
 import QtLocation 5.9
 import QtPositioning 5.5
 import "./"
-import Baugeschichte 1.0
 
 BaseView {
     id: root
@@ -59,10 +59,10 @@ BaseView {
             var dist = (dist1 > dist2) ? dist1 : dist2;
             var radius = dist / 2.0;
 
-            markerLoader.radius = radius;
+            MarkerLoader.radius = radius;
             root.radius = map.center.distanceTo(coord1);
 
-            markerLoader.loadAll = map.zoomLevel > 17;
+            MarkerLoader.loadAll = map.zoomLevel > 17;
 
             if (map.zoomLevel < 18) {
                 var coord3 = map.toCoordinate(Qt.point(map.markerSize * 1.1, 0))
@@ -76,25 +76,25 @@ BaseView {
 
     HouseLocationFilter {
         id: locationFilter
-        sourceModel: houseTrailModel
+        sourceModel: HouseTrailModel
         location: map.center
         radius: root.radius
-        unfilteredHouseTitle: appCore.selectedHouse
+        unfilteredHouseTitle: AppCore.selectedHouse
     }
 
     HouseLocationFilter {
         id: categoryModel
-        sourceModel: appCore.categoryHouses
+        sourceModel: AppCore.categoryHouses
         location: map.center
         radius: root.radius
-        unfilteredHouseTitle: appCore.selectedHouse
+        unfilteredHouseTitle: AppCore.selectedHouse
         minDistance: locationFilter.minDistance
     }
 
     PositionSource {
         id: myPosition
         preferredPositioningMethods: PositionSource.AllPositioningMethods
-        active: appCore.showPosition
+        active: AppCore.showPosition
         updateInterval: 1500
 
         // even when not following - jump to current position on first position reveice
@@ -106,7 +106,7 @@ BaseView {
         }
 
         onPositionChanged: {
-            if (appCore.followPosition || firstUpdate) {
+            if (AppCore.followPosition || firstUpdate) {
                 firstUpdate = false;
                 map.center = myPosition.position.coordinate
             }
@@ -119,7 +119,7 @@ BaseView {
         anchors.centerIn: parent
         width: parent.width / scale
         height: parent.height / scale
-        scale: appCore.extraScaling ? 2 : 1 //appCore.mapProvider === "mapboxgl" ? 1 : Screen.devicePixelRatio
+        scale: AppCore.extraScaling ? 2 : 1 //AppCore.mapProvider === "mapboxgl" ? 1 : Screen.devicePixelRatio
 
         gesture.acceptedGestures: MapGestureArea.PinchGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
 
@@ -127,9 +127,9 @@ BaseView {
 
         onCenterChanged: {
             if (autoUpdatePois) {
-                markerLoader.setLocation(center.latitude, center.longitude);
+                MarkerLoader.setLocation(center.latitude, center.longitude);
             }
-            appCore.currentMapPosition = center;
+            AppCore.currentMapPosition = center;
         }
 
         onZoomLevelChanged: {
@@ -145,17 +145,17 @@ BaseView {
         MultiPointTouchArea {
             anchors.fill: parent
             onPressed: {
-                appCore.followPosition = false;
+                AppCore.followPosition = false;
                 map.gesture.enabled = true; // workaround for issue #76 Text-Bubble muss 2x angetippt werden
             }
             onReleased: {
-                appCore.clearHouseSelection();
+                AppCore.clearHouseSelection();
             }
         }
 
 //        plugin: initPlugin() // is initialized in Component.onCompleted
         function initPlugin() {
-            switch (appCore.mapProvider) {
+            switch (AppCore.mapProvider) {
             case "mapboxGl": return mapboxGlPlugin;
             case "mapbox": return mapBoxPlugin;
             case "osm": return osmPlugin;
@@ -203,7 +203,7 @@ BaseView {
         }
 
         RouteLine {
-            source: appCore.routeKML !== "" ? "http://baugeschichte.at/" + appCore.routeKML : ""
+            source: AppCore.routeKML !== "" ? "http://baugeschichte.at/" + AppCore.routeKML : ""
         }
 
         MapItemView {
@@ -218,7 +218,7 @@ BaseView {
                 anchorPoint.x: image.width * 0.5
                 anchorPoint.y: image.height
 
-                z: appCore.selectedHouse === title ? 999 : 0
+                z: AppCore.selectedHouse === title ? 999 : 0
 
                 sourceItem: Item {
                     id: sourceItem
@@ -237,7 +237,7 @@ BaseView {
                         fillMode: Image.PreserveAspectFit
 
                         function getSource() {
-                            if (title === appCore.selectedHouse) {
+                            if (title === AppCore.selectedHouse) {
                                 return "qrc:/resources/marker-blue.svg";
                             }
                             if (routeLoader.isRouteHouse(title)) {
@@ -262,12 +262,12 @@ BaseView {
                         onReleased: changeCurrentItem();
 
                         function changeCurrentItem() {
-                            var showDetails = appCore.selectedHouse === title;
-                            appCore.selectedHouse = title;
+                            var showDetails = AppCore.selectedHouse === title;
+                            AppCore.selectedHouse = title;
                             map.gesture.enabled = false; // workaround for issue #76 Text-Bubble muss 2x angetippt werden
                             if (showDetails) {
-                                appCore.showDetails = true;
-                                appCore.centerSelectedHouse();
+                                AppCore.showDetails = true;
+                                AppCore.centerSelectedHouse();
                             }
                         }
                     }
@@ -283,7 +283,7 @@ BaseView {
                         border.width: 1
                         border.color: "#0048a0"
                         radius: 3
-                        visible: appCore.selectedHouse === title
+                        visible: AppCore.selectedHouse === title
                         Text {
                             id: textItem
                             anchors.centerIn: parent
@@ -297,9 +297,9 @@ BaseView {
                             anchors.fill: parent
 
                             onReleased: {
-                                appCore.selectedHouse = title;
-                                appCore.showDetails = true;
-                                appCore.centerSelectedHouse();
+                                AppCore.selectedHouse = title;
+                                AppCore.showDetails = true;
+                                AppCore.centerSelectedHouse();
                             }
                         }
                     }
@@ -311,7 +311,7 @@ BaseView {
             id: positionCircle
             positionSource: myPosition
             scale: 1 / map.scale
-            visible: appCore.showPosition
+            visible: AppCore.showPosition
         }
 
         Component.onCompleted: {
@@ -347,10 +347,10 @@ BaseView {
     }
 
     Connections {
-        target: appCore
+        target: AppCore
         onCurrentMapPositionChanged: {
-            if (map.center !== appCore.currentMapPosition) {
-                map.center = appCore.currentMapPosition;
+            if (map.center !== AppCore.currentMapPosition) {
+                map.center = AppCore.currentMapPosition;
             }
         }
         onRequestFullZoomIn: {

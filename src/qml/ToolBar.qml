@@ -24,6 +24,7 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.5
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
@@ -55,14 +56,14 @@ Item {
             id: mapButton
             source: "qrc:/resources/icon-map.svg"
             onClicked: {
-                if (appCore.showDetails) {
-                    appCore.showDetails = false;
+                if (AppCore.showDetails) {
+                    AppCore.showDetails = false;
                     return;
                 }
                 
                 mapItem.resetToMainModel();
                 stackView.pop(null);
-                appCore.routeKML = "";
+                AppCore.routeKML = "";
                 routeLoader.reset();
             }
         }
@@ -72,9 +73,9 @@ Item {
             source: "qrc:/resources/icon-search.svg"
             onClicked: {
                 mapItem.resetToMainModel();
-                appCore.clearHouseSelection();
-                appCore.showDetails = false;
-                appCore.routeKML = "";
+                AppCore.clearHouseSelection();
+                AppCore.showDetails = false;
+                AppCore.routeKML = "";
                 routeLoader.routeHouses = [];
                 stackView.pop(null);
                 stackView.push(Qt.resolvedUrl("SearchPage.qml"));
@@ -86,9 +87,9 @@ Item {
             source: "qrc:/resources/icon-categories.svg"
             onClicked: {
                 mapItem.useCategoryModel();
-                appCore.clearHouseSelection();
-                appCore.showDetails = false;
-                appCore.routeKML = "";
+                AppCore.clearHouseSelection();
+                AppCore.showDetails = false;
+                AppCore.routeKML = "";
                 routeLoader.routeHouses = [];
                 stackView.pop(null);
                 stackView.push(Qt.resolvedUrl("CategoryselectionView.qml"));
@@ -100,9 +101,9 @@ Item {
             source: "qrc:/resources/icon-route.svg"
             onClicked: {
                 mapItem.resetToMainModel();
-                appCore.clearHouseSelection();
-                appCore.showDetails = false;
-                appCore.routeKML = "";
+                AppCore.clearHouseSelection();
+                AppCore.showDetails = false;
+                AppCore.routeKML = "";
                 routeLoader.routeHouses = [];
                 stackView.push(Qt.resolvedUrl("RouteView.qml"));
             }
@@ -114,23 +115,23 @@ Item {
             enabled: positionCheck.valid
             
             onClicked: {
-                if (!appCore.showPosition) {
-                    appCore.showPosition = true;
-                    appCore.followPosition = false;
+                if (!AppCore.showPosition) {
+                    AppCore.showPosition = true;
+                    AppCore.followPosition = false;
                 } else {
-                    if (appCore.followPosition) {
-                        appCore.showPosition = false;
+                    if (AppCore.followPosition) {
+                        AppCore.showPosition = false;
                     } else {
-                        appCore.followPosition = true;
+                        AppCore.followPosition = true;
                     }
                 }
             }
             
             function iconFromState() {
-                if (!appCore.showPosition) {
+                if (!AppCore.showPosition) {
                     return "qrc:/resources/gps_off.svg"
                 } else {
-                    if (appCore.followPosition) {
+                    if (AppCore.followPosition) {
                         return "qrc:/resources/gps_follow.svg"
                     } else {
                         return "qrc:/resources/gps_on.svg"

@@ -24,6 +24,7 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.3
@@ -45,8 +46,8 @@ Item {
     Material.accent: Material.LightBlue
 
     readonly property bool loading: (uiStack.currentItem && uiStack.currentItem.loading) ||
-                                    markerLoader.loading ||
-                                    categoryLoader.isLoading || routeLoader.loading
+                                    MarkerLoader.loading ||
+                                    CategoryLoader.isLoading || routeLoader.loading
 
     property MapComponent mainMap: null
 
@@ -54,7 +55,7 @@ Item {
     {
         console.log("uiStack Depth:" + uiStack.depth)
         if (uiStack.currentItem.detailsOpen) {
-            appCore.showDetails = false;
+            AppCore.showDetails = false;
         } else {
             if (uiStack.depth > 1) {
                 uiStack.pop();
@@ -74,7 +75,7 @@ Item {
         id: reloadAction
         sequence: "Ctrl+R"
         onActivated: {
-            appCore.reloadUI();
+            AppCore.reloadUI();
         }
     }
     Shortcut {
@@ -102,7 +103,7 @@ Item {
     }
 
     Connections {
-        target: mainView
+        target: AppCore
         onBackKeyPressed: {
             root.goBack();
         }
@@ -188,7 +189,7 @@ Item {
                     height: parent.height
 
                     clip: true
-                    visible: appCore.showDetails
+                    visible: AppCore.showDetails
                     onVisibleChanged: {
                         if (visible && source == "") {
                             setSource("DetailsView.qml");
@@ -218,7 +219,7 @@ Item {
             }
 
             Connections {
-                target: appCore
+                target: AppCore
                 onMapProviderChanged: {
                     loader_mapOfEurope.reloadMapItem();
                 }
