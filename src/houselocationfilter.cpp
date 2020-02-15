@@ -120,7 +120,7 @@ void HouseLocationFilter::setUnfilteredHouseTitle(const QString& houseTitle)
     }
 
     d->m_unfilteredHouseTitle = houseTitle;
-    emit unfilteredHouseTitleChanged(d->m_unfilteredHouseTitle);
+    Q_EMIT unfilteredHouseTitleChanged(d->m_unfilteredHouseTitle);
     d->m_invalidateTimer.start();
 }
 
@@ -132,7 +132,7 @@ void HouseLocationFilter::setLocation(const QGeoCoordinate& location)
     }
 
     d->m_location = location;
-    emit locationChanged(d->m_location);
+    Q_EMIT locationChanged(d->m_location);
     d->m_invalidateTimer.start();
 }
 
@@ -143,7 +143,7 @@ void HouseLocationFilter::setRadius(double radius)
         return;
 
     d->m_radius = radius;
-    emit radiusChanged(radius);
+    Q_EMIT radiusChanged(radius);
     d->m_invalidateTimer.start();
 }
 
@@ -155,7 +155,7 @@ void HouseLocationFilter::setMinDistance(double minDistance)
     }
 
     d->m_minDistance = minDistance;
-    emit minDistanceChanged(minDistance);
+    Q_EMIT minDistanceChanged(minDistance);
     d->m_invalidateTimer.start();
 }
 

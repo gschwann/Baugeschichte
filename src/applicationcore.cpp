@@ -159,7 +159,7 @@ void ApplicationCore::setMapProvider(QString mapProvider)
     saveMapPosition();
     m_settings->setValue("MapProvider", mapProvider);
     m_settings->sync();
-    emit mapProviderChanged(mapProvider);
+    Q_EMIT mapProviderChanged(mapProvider);
 }
 
 QString ApplicationCore::selectedHouse() const
@@ -198,7 +198,7 @@ void ApplicationCore::centerSelectedHouse()
     HouseMarker* house = m_houseMarkerModel->getHouseByTitle(m_selectedHouse);
     if (house != nullptr) {
         setCurrentMapPosition(house->location());
-        emit requestFullZoomIn();
+        Q_EMIT requestFullZoomIn();
     } else {
         QString requestString = QString(
             "http://baugeschichte.at/api.php?action=ask&query=[[%1]]|%3FKoordinaten|%3FPostleitzahl&format=json")
@@ -236,7 +236,7 @@ void ApplicationCore::setShowPosition(bool showPosition)
     }
 
     m_showPosition = showPosition;
-    emit showPositionChanged(m_showPosition);
+    Q_EMIT showPositionChanged(m_showPosition);
 }
 
 bool ApplicationCore::followPosition() const
@@ -251,7 +251,7 @@ void ApplicationCore::setFollowPosition(bool followPosition)
     }
 
     m_followPosition = followPosition;
-    emit followPositionChanged(m_followPosition);
+    Q_EMIT followPositionChanged(m_followPosition);
 }
 
 QString ApplicationCore::detailsLanguage() const
@@ -266,7 +266,7 @@ void ApplicationCore::setDetailsLanguage(QString detailsLanguage)
     }
 
     m_detailsLanguage = detailsLanguage;
-    emit detailsLanguageChanged(m_detailsLanguage);
+    Q_EMIT detailsLanguageChanged(m_detailsLanguage);
 }
 
 void ApplicationCore::openExternalLink(const QString& link)
@@ -287,7 +287,7 @@ void ApplicationCore::setExtraScaling(bool extraScaling)
 
     m_extraScaling = extraScaling;
     m_settings->sync();
-    emit extraScalingChanged(m_extraScaling);
+    Q_EMIT extraScalingChanged(m_extraScaling);
 }
 
 QString ApplicationCore::versionString() const
@@ -317,12 +317,12 @@ void ApplicationCore::setSelectedHouse(const QString& selectedHouse)
     }
 
     m_selectedHouse = selectedHouse;
-    emit selectedHouseChanged(selectedHouse);
+    Q_EMIT selectedHouseChanged(selectedHouse);
 
     HouseMarker* house = m_houseMarkerModel->getHouseByTitle(m_selectedHouse);
     if (house != nullptr) {
         m_selectedHousePosition = house->location();
-        emit selectedHousePositionChanged(m_selectedHousePosition);
+        Q_EMIT selectedHousePositionChanged(m_selectedHousePosition);
     }
 
     if (m_selectedHouse.isEmpty()) {
@@ -337,7 +337,7 @@ void ApplicationCore::setCurrentMapPosition(const QGeoCoordinate& currentMapPosi
     }
 
     m_currentMapPosition = currentMapPosition;
-    emit currentMapPositionChanged(currentMapPosition);
+    Q_EMIT currentMapPositionChanged(currentMapPosition);
 }
 
 void ApplicationCore::setShowDetails(bool showDetails)
@@ -347,7 +347,7 @@ void ApplicationCore::setShowDetails(bool showDetails)
     }
 
     m_showDetails = showDetails;
-    emit showDetailsChanged(showDetails);
+    Q_EMIT showDetailsChanged(showDetails);
 }
 
 void ApplicationCore::setRouteKML(const QString& routeKML)
@@ -357,7 +357,7 @@ void ApplicationCore::setRouteKML(const QString& routeKML)
     }
 
     m_routeKML = routeKML;
-    emit routeKMLChanged(routeKML);
+    Q_EMIT routeKMLChanged(routeKML);
 }
 
 void ApplicationCore::saveMapPosition()
@@ -426,7 +426,7 @@ void ApplicationCore::handleLoadedHouseCoordinates(QNetworkReply* reply)
     QGeoCoordinate coord(coordObject["lat"].toDouble(), coordObject["lon"].toDouble());
 
     setCurrentMapPosition(coord);
-    emit requestFullZoomIn();
+    Q_EMIT requestFullZoomIn();
 }
 
 QString ApplicationCore::mainQMLFile() const

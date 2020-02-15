@@ -33,7 +33,7 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 {
     if(event->key()==Qt::Key_Back) {
         // workaround for issue https://github.com/gschwann/Baugeschichte/issues/77
-        emit backKeyPressed();
+        Q_EMIT backKeyPressed();
         event->accept();
     } else  {
         QQuickView::keyPressEvent(event);

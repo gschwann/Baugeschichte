@@ -113,9 +113,9 @@ void MarkerLoader::setLocation(double latitude, double longitude)
     d->m_latitude = latitude;
     d->m_longitude = longitude;
 
-    emit latitudeChanged(d->m_latitude);
-    emit longitudeChanged(d->m_longitude);
-    emit locationChanged(d->m_latitude, d->m_longitude);
+    Q_EMIT latitudeChanged(d->m_latitude);
+    Q_EMIT longitudeChanged(d->m_longitude);
+    Q_EMIT locationChanged(d->m_latitude, d->m_longitude);
 
     d->m_lazyLoadTimer.start();
 }
@@ -134,7 +134,7 @@ void MarkerLoader::setRadius(double radius)
     }
 
     d->m_radius = radius;
-    emit radiusChanged(radius);
+    Q_EMIT radiusChanged(radius);
 
     d->m_lazyLoadTimer.start();
 }
@@ -153,7 +153,7 @@ void MarkerLoader::setLoadAll(bool loadAll)
     }
 
     d->m_loadAll = loadAll;
-    emit loadAllChanged(d->m_loadAll);
+    Q_EMIT loadAllChanged(d->m_loadAll);
 
     d->m_lazyLoadTimer.start();
 }
@@ -240,7 +240,7 @@ void MarkerLoader::createModelAsync(QNetworkReply* theReply)
                         markers.push_back(aHouseTrail);
                     }
 
-                    emit newHousetrail(markers);
+                    Q_EMIT newHousetrail(markers);
                 }
             } else
                 theResponse = "empty";
@@ -261,5 +261,5 @@ void MarkerLoader::setLoading(bool loading)
     }
 
     d->m_loading = loading;
-    emit loadingChanged(d->m_loading);
+    Q_EMIT loadingChanged(d->m_loading);
 }

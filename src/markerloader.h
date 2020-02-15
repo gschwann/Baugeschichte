@@ -64,7 +64,7 @@ public:
 
     bool loading() const;
 
-signals:
+Q_SIGNALS:
     void latitudeChanged(double);
     void longitudeChanged(double);
     void locationChanged(double, double);
@@ -74,7 +74,7 @@ signals:
 
     void loadAllChanged(bool loadAll);
 
-private slots:
+private Q_SLOTS:
     void loadMarkers();
     void poisFinished(QNetworkReply* theReply);
     void createModelAsync(QNetworkReply* theReply);

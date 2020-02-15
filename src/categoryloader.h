@@ -54,11 +54,11 @@ public:
 
     void loadFromJsonText(const QByteArray& jsonText);
 
-signals:
+Q_SIGNALS:
     void isLoadingChanged(bool loading);
     void newHousetrail(QVector<HouseMarker> aNewHouseTrail);
 
-private slots:
+private Q_SLOTS:
     void categoryLoaded(QNetworkReply* theReply);
 
 private:
