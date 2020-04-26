@@ -11,54 +11,29 @@ QT += qml quick location positioning concurrent sensors svg xml sql
 android {
     QT += androidextras
 
-    equals(ANDROID_TARGET_ARCH, arm64-v8a) {
-        LIBPATH64 = $$absolute_path($$OUT_PWD/openssl-android/arm64-v8a)
-        !exists($$LIBPATH64/libssl_1_1.so) {
-            system("mkdir -p $$LIBPATH64")
-            system("cd $$LIBPATH64 && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libssl_1_1.so")
-            system("cd $$LIBPATH64 && wget https://github.com/KDAB/android_openssl/raw/master/arm64/libcrypto_1_1.so")
-            # correct ssl lib filenames
-            system("cd $$LIBPATH64 && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
-        }
-        ANDROID_EXTRA_LIBS += \
-            $$LIBPATH64/libssl.so \
-            $$LIBPATH64/libcrypto.so \
-            $$LIBPATH64/libssl_1_1.so \
-            $$LIBPATH64/libcrypto_1_1.so
+    # Use SSL from https://github.com/KDAB/android_openssl
+    SSL_PRI = /opt/android/android-sdk/android_openssl
+    !exists($$SSL_PRI) {
+        # if the ssl libis noxt downloaded, load/use it in the build dir
+        SSL_PRI = $$absolute_path($$OUT_PWD/android_openssl-master/openssl.pri)
     }
 
-    equals(ANDROID_TARGET_ARCH, armeabi-v7a) {
-        LIBPATH32 = $$absolute_path($$OUT_PWD/openssl-android/armeabi-v7a)
-        !exists($$LIBPATH32/libssl_1_1.so) {
-            system("mkdir -p $$LIBPATH32")
-            system("cd $$LIBPATH32 && wget https://github.com/KDAB/android_openssl/raw/master/arm/libssl_1_1.so")
-            system("cd $$LIBPATH32 && wget https://github.com/KDAB/android_openssl/raw/master/arm/libcrypto_1_1.so")
-            # correct ssl lib filenames
-            system("cd $$LIBPATH32 && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
-        }
-        ANDROID_EXTRA_LIBS += \
-            $$LIBPATH32/libssl.so \
-            $$LIBPATH32/libcrypto.so \
-            $$LIBPATH32/libssl_1_1.so \
-            $$LIBPATH32/libcrypto_1_1.so
+    !exists($$SSL_PRI) {
+        system("cd $$OUT_PWD && wget https://github.com/KDAB/android_openssl/archive/master.zip && unzip master.zip")
     }
+    include($$SSL_PRI)
 
+    # Set the version code based on the app version
     defineReplace(droidVersionCode) {
             segments = $$split(1, ".")
             for (segment, segments): vCode = "$$first(vCode)$$format_number($$segment, width=3 zeropad)"
 
-            contains(ANDROID_TARGET_ARCH, arm64-v8a): \
-                suffix = 1
-            else:contains(ANDROID_TARGET_ARCH, armeabi-v7a): \
-                suffix = 0
-            # add more cases as needed
-
+            suffix = 2
             return($$first(vCode)$$first(suffix))
     }
 
     ANDROID_VERSION_NAME = $$VERSION
     ANDROID_VERSION_CODE = $$droidVersionCode($$ANDROID_VERSION_NAME)
-
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 }
 
@@ -121,6 +96,10 @@ HEADERS += \
 DISTFILES += \
     android/AndroidManifest.xml \
     android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew \
+    android/gradlew.bat \
     android/res/values/libs.xml
 
 include(deployment.pri)
