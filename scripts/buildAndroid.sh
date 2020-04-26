@@ -1,6 +1,6 @@
 #!/bin/sh
 
-QT_DIR=/opt/Qt/5.14.1
+QT_DIR=/opt/Qt/5.14.2
 PLATFORM=android-29
 
 if [ -z "$ANDROID_NDK_ROOT" ]; then

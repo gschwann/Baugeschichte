@@ -11,17 +11,44 @@ QT += qml quick location positioning concurrent sensors svg xml sql
 android {
     QT += androidextras
 
-    # Use SSL from https://github.com/KDAB/android_openssl
-    SSL_PRI = /opt/android/android-sdk/android_openssl
-    !exists($$SSL_PRI) {
-        # if the ssl libis noxt downloaded, load/use it in the build dir
-        SSL_PRI = $$absolute_path($$OUT_PWD/android_openssl-master/openssl.pri)
-    }
+#    # Use SSL from https://github.com/KDAB/android_openssl
+#    SSL_PRI = /opt/android/android-sdk/android_openssl
+#    !exists($$SSL_PRI) {
+#        # if the ssl lib is not downloaded, load/use it in the build dir
+#        SSL_PRI = $$absolute_path($$OUT_PWD/android_openssl-master/openssl.pri)
+#    }
 
-    !exists($$SSL_PRI) {
-        system("cd $$OUT_PWD && wget https://github.com/KDAB/android_openssl/archive/master.zip && unzip master.zip")
+#    !exists($$SSL_PRI) {
+#        system("cd $$OUT_PWD && wget https://github.com/KDAB/android_openssl/archive/master.zip && unzip master.zip")
+#    }
+#    message("Using SSL project: $$SSL_PRI")
+#    include($$SSL_PRI)
+
+    LIBPATH64 = $$absolute_path($$OUT_PWD/openssl-android/arm64-v8a)
+    !exists($$LIBPATH64/libssl_1_1.so) {
+        system("mkdir -p $$LIBPATH64")
+        system("cd $$LIBPATH64 && wget https://github.com/KDAB/android_openssl/raw/master/latest/arm64/libssl_1_1.so")
+        system("cd $$LIBPATH64 && wget https://github.com/KDAB/android_openssl/raw/master/latest/arm64/libcrypto_1_1.so")
+        # correct ssl lib filenames
+        system("cd $$LIBPATH64 && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
     }
-    include($$SSL_PRI)
+    LIBPATH32 = $$absolute_path($$OUT_PWD/openssl-android/armeabi-v7a)
+    !exists($$LIBPATH32/libssl_1_1.so) {
+        system("mkdir -p $$LIBPATH32")
+        system("cd $$LIBPATH32 && wget https://github.com/KDAB/android_openssl/raw/master/latest/arm/libssl_1_1.so")
+        system("cd $$LIBPATH32 && wget https://github.com/KDAB/android_openssl/raw/master/latest/arm/libcrypto_1_1.so")
+        # correct ssl lib filenames
+        system("cd $$LIBPATH32 && cp libssl_1_1.so libssl.so && cp libcrypto_1_1.so libcrypto.so")
+    }
+    ANDROID_EXTRA_LIBS += \
+        $$LIBPATH64/libssl.so \
+        $$LIBPATH64/libcrypto.so \
+        $$LIBPATH64/libssl_1_1.so \
+        $$LIBPATH64/libcrypto_1_1.so \
+        $$LIBPATH32/libssl.so \
+        $$LIBPATH32/libcrypto.so \
+        $$LIBPATH32/libssl_1_1.so \
+        $$LIBPATH32/libcrypto_1_1.so
 
     # Set the version code based on the app version
     defineReplace(droidVersionCode) {
