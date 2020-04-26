@@ -61,7 +61,7 @@ public:
 
     Q_INVOKABLE void setRouteHouses(QVariant variant);
 
-public slots:
+public Q_SLOTS:
     /**
      * @param radius in meters
      */
@@ -72,8 +72,7 @@ public slots:
      */
     void setMinDistance(double minDistance);
 
-
-signals:
+Q_SIGNALS:
     void radiusChanged(double radius);
     void locationChanged(const QGeoCoordinate& location);
     void minDistanceChanged(double minDistance);
@@ -82,7 +81,7 @@ signals:
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 
-private slots:
+private Q_SLOTS:
     void triggerRefiltering();
 
 private:

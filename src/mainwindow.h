@@ -33,7 +33,7 @@ class MainWindow : public QQuickView
 public:
     MainWindow();
 
-signals:
+Q_SIGNALS:
     void backKeyPressed();
 
 protected:

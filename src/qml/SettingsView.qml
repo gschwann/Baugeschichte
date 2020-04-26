@@ -24,9 +24,9 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.5
 import QtQuick.Controls 2.0
-import Baugeschichte 1.0
 
 Item {
     id: root
@@ -62,11 +62,11 @@ Item {
                 ListElement { key: qsTr("MapBox"); value: "mapbox" }
                 ListElement { key: qsTr("MapBoxGL"); value: "mapboxGl" }
             }
-            currentIndex: appCore.mapProvider === "osm" ? 0 : (appCore.mapProvider === "mapbox" ? 1 : 2)
+            currentIndex: AppCore.mapProvider === "osm" ? 0 : (AppCore.mapProvider === "mapbox" ? 1 : 2)
             onCurrentIndexChanged: {
                 var newValue = providerModel.get(currentIndex).value;
-                if (newValue !== appCore.mapProvider) {
-                    appCore.mapProvider = newValue;
+                if (newValue !== AppCore.mapProvider) {
+                    AppCore.mapProvider = newValue;
                     __reloadUI = true;
                 }
             }
@@ -82,9 +82,9 @@ Item {
         CheckBox {
             id: extraScaleItem
             text: qsTr("Do extra scaling")
-            checked: appCore.extraScaling
+            checked: AppCore.extraScaling
             onClicked: {
-                appCore.extraScaling = checked;
+                AppCore.extraScaling = checked;
             }
         }
 
@@ -92,7 +92,7 @@ Item {
         }
 
         Text {
-            text: qsTr("Version: ") + appCore.versionString
+            text: qsTr("Version: ") + AppCore.versionString
         }
 
         LineSeparator {
@@ -109,7 +109,7 @@ Item {
     Component.onDestruction: {
         if (__reloadUI) {
             __reloadUI = false;
-            appCore.reloadUI();
+            AppCore.reloadUI();
         }
     }
 }

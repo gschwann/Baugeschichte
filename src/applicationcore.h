@@ -103,7 +103,7 @@ public:
 
     QString versionString() const;
 
-public slots:
+public Q_SLOTS:
     void handleApplicationStateChange(Qt::ApplicationState state);
 
     void setSelectedHouse(const QString& selectedHouse);
@@ -115,7 +115,7 @@ public slots:
 
     void saveMapPosition();
 
-signals:
+Q_SIGNALS:
     void mapProviderChanged(QString mapProvider);
     void selectedHouseChanged(QString selectedHouse);
     void selectedHousePositionChanged(QGeoCoordinate selectedHousePosition);
@@ -128,8 +128,9 @@ signals:
     void followPositionChanged(bool followPosition);
     void detailsLanguageChanged(QString detailsLanguage);
     void extraScalingChanged(bool extraScaling);
+    void backKeyPressed();
 
-private slots:
+private Q_SLOTS:
     void doReloadUI();
     void handleLoadedHouseCoordinates(QNetworkReply* reply);
 

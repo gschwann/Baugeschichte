@@ -127,7 +127,7 @@ void CategoryLoader::loadFromJsonText(const QByteArray& jsonText)
     }
 
     if (!markers.isEmpty()) {
-        emit newHousetrail(markers);
+        Q_EMIT newHousetrail(markers);
     }
 }
 
@@ -169,5 +169,5 @@ void CategoryLoader::setLoading(bool loading)
     }
 
     d->m_loading = loading;
-    emit isLoadingChanged(d->m_loading);
+    Q_EMIT isLoadingChanged(d->m_loading);
 }

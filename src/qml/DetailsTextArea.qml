@@ -24,6 +24,7 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.4
 import QtQuick.Controls 2.0
 import "./"
@@ -68,10 +69,10 @@ Item {
                     if (link.substr(0, 11) === "internal://") {
                         var newBuilding = link.substring(11, link.length);
                         console.debug("Open internal link: "+newBuilding);
-                        appCore.selectAndCenterHouse(newBuilding);
+                        AppCore.selectAndCenterHouse(newBuilding);
                     } else {
                         console.debug("Open external link: "+link);
-                        appCore.openExternalLink(link);
+                        AppCore.openExternalLink(link);
                     }
                 }
             }

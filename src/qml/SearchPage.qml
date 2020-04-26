@@ -24,6 +24,7 @@
  ** SOFTWARE.
  **/
 
+import Baugeschichte 1.0
 import QtQuick 2.4
 import "./"
 
@@ -63,9 +64,9 @@ BaseView {
             text: title
             onSelected: {
                 if (isBuilding) {
-                    appCore.selectedHouse = title;
-                    appCore.showDetails = true;
-                    appCore.centerSelectedHouse();
+                    AppCore.selectedHouse = title;
+                    AppCore.showDetails = true;
+                    AppCore.centerSelectedHouse();
                     uiStack.pop(null);
                 } else {
                     searchModel.limitResults = false;
