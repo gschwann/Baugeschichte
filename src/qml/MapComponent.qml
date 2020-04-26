@@ -41,33 +41,32 @@ BaseView {
     property alias center: map.center
     property alias zoomLevel: map.zoomLevel
 
-    function resetToMainModel()
-    {
-        housetrailMapItems.model = locationFilter;
+    function resetToMainModel() {
+        housetrailMapItems.model = locationFilter
     }
-    function useCategoryModel()
-    {
-        housetrailMapItems.model = categoryModel;
+    function useCategoryModel() {
+        housetrailMapItems.model = categoryModel
     }
 
     function updateRadius() {
         if (autoUpdatePois) {
             var coord1 = map.toCoordinate(Qt.point(0, 0))
-            var coord2 = map.toCoordinate(Qt.point(map.width-1, map.height-1))
+            var coord2 = map.toCoordinate(Qt.point(map.width - 1,
+                                                   map.height - 1))
             var dist1 = Math.abs(coord1.latitude - coord2.latitude)
             var dist2 = Math.abs(coord1.longitude - coord2.longitude)
-            var dist = (dist1 > dist2) ? dist1 : dist2;
-            var radius = dist / 2.0;
+            var dist = (dist1 > dist2) ? dist1 : dist2
+            var radius = dist / 2.0
 
-            MarkerLoader.radius = radius;
-            root.radius = map.center.distanceTo(coord1);
+            MarkerLoader.radius = radius
+            root.radius = map.center.distanceTo(coord1)
 
-            MarkerLoader.loadAll = map.zoomLevel > 17;
+            MarkerLoader.loadAll = map.zoomLevel > 17
 
             if (map.zoomLevel < 18) {
                 var coord3 = map.toCoordinate(Qt.point(map.markerSize * 1.1, 0))
                 var markerDist = coord1.distanceTo(coord3)
-                locationFilter.minDistance = markerDist;
+                locationFilter.minDistance = markerDist
             } else {
                 locationFilter.minDistance = 1e-3
             }
@@ -101,13 +100,13 @@ BaseView {
         property bool firstUpdate: true
         onActiveChanged: {
             if (active) {
-                firstUpdate = true;
+                firstUpdate = true
             }
         }
 
         onPositionChanged: {
             if (AppCore.followPosition || firstUpdate) {
-                firstUpdate = false;
+                firstUpdate = false
                 map.center = myPosition.position.coordinate
             }
         }
@@ -121,57 +120,59 @@ BaseView {
         height: parent.height / scale
         scale: AppCore.extraScaling ? 2 : 1 //AppCore.mapProvider === "mapboxgl" ? 1 : Screen.devicePixelRatio
 
-        gesture.acceptedGestures: MapGestureArea.PinchGesture | MapGestureArea.PanGesture | MapGestureArea.FlickGesture
+        gesture.acceptedGestures: MapGestureArea.PinchGesture | MapGestureArea.PanGesture
+                                  | MapGestureArea.FlickGesture
 
         readonly property int markerSize: Theme.defaultMarkerSize / map.scale
 
         onCenterChanged: {
             if (autoUpdatePois) {
-                MarkerLoader.setLocation(center.latitude, center.longitude);
+                MarkerLoader.setLocation(center.latitude, center.longitude)
             }
-            AppCore.currentMapPosition = center;
+            AppCore.currentMapPosition = center
         }
 
         onZoomLevelChanged: {
-            root.updateRadius();
+            root.updateRadius()
         }
         onWidthChanged: {
-            root.updateRadius();
+            root.updateRadius()
         }
         onHeightChanged: {
-            root.updateRadius();
+            root.updateRadius()
         }
 
         MultiPointTouchArea {
             anchors.fill: parent
             onPressed: {
-                AppCore.followPosition = false;
-                map.gesture.enabled = true; // workaround for issue #76 Text-Bubble muss 2x angetippt werden
+                AppCore.followPosition = false
+                map.gesture.enabled
+                        = true // workaround for issue #76 Text-Bubble muss 2x angetippt werden
             }
             onReleased: {
-                AppCore.clearHouseSelection();
+                AppCore.clearHouseSelection()
             }
         }
 
-//        plugin: initPlugin() // is initialized in Component.onCompleted
+        //        plugin: initPlugin() // is initialized in Component.onCompleted
         function initPlugin() {
             switch (AppCore.mapProvider) {
-            case "mapboxGl": return mapboxGlPlugin;
-            case "mapbox": return mapBoxPlugin;
-            case "osm": return osmPlugin;
-            default: return mapboxGlPlugin
+            case "mapboxGl":
+                return mapboxGlPlugin
+            case "mapbox":
+                return mapBoxPlugin
+            case "osm":
+                return osmPlugin
+            default:
+                return mapboxGlPlugin
             }
-//            return mapboxGlPlugin;
-//            return mapBoxPlugin;
-//            return osmPlugin;
+            //            return mapboxGlPlugin;
+            //            return mapBoxPlugin;
+            //            return osmPlugin;
         }
         Plugin {
             id: mapBoxPlugin
             name: "mapbox"
-            PluginParameter {
-                name: "mapbox.mapping.map_id"
-                value: "mapbox.streets"
-            }
             PluginParameter {
                 name: "mapbox.access_token"
                 value: "pk.eyJ1IjoiYmF1Z2VzY2hpY2h0ZSIsImEiOiJjaXFqdXU4OG8wMDAxaHltYnVmcHV2bjVjIn0.C2joRbxcvAQGbF9I-KhgnA"
@@ -185,10 +186,6 @@ BaseView {
             id: mapboxGlPlugin
             name: "mapboxgl"
             PluginParameter {
-                name: "mapbox.map_id"
-                value: "mapbox.streets"
-            }
-            PluginParameter {
                 name: "mapboxgl.access_token"
                 value: "pk.eyJ1IjoiYmF1Z2VzY2hpY2h0ZSIsImEiOiJjaXFqdXU4OG8wMDAxaHltYnVmcHV2bjVjIn0.C2joRbxcvAQGbF9I-KhgnA"
             }
@@ -196,6 +193,10 @@ BaseView {
         Plugin {
             id: osmPlugin
             name: "osm"
+            PluginParameter {
+                name: "osm.useragent"
+                value: "Baugeschichte/GrazWiki"
+            }
             PluginParameter {
                 name: "osm.mapping.highdpi_tiles"
                 value: Screen.devicePixelRatio > 1
@@ -238,10 +239,10 @@ BaseView {
 
                         function getSource() {
                             if (title === AppCore.selectedHouse) {
-                                return "qrc:/resources/marker-blue.svg";
+                                return "qrc:/resources/marker-blue.svg"
                             }
                             if (routeLoader.isRouteHouse(title)) {
-                                return "qrc:/resources/marker-red.svg";
+                                return "qrc:/resources/marker-red.svg"
                             }
                             return "qrc:/resources/marker.svg"
                         }
@@ -250,7 +251,9 @@ BaseView {
                             target: routeLoader
                             onLoadingChanged: {
                                 if (!routeLoader.loading) {
-                                    image.source = Qt.binding(function(){return image.getSource();});
+                                    image.source = Qt.binding(function () {
+                                        return image.getSource()
+                                    })
                                 }
                             }
                         }
@@ -259,15 +262,15 @@ BaseView {
                         id: clickArea
                         anchors.fill: parent
 
-                        onReleased: changeCurrentItem();
+                        onReleased: changeCurrentItem()
 
                         function changeCurrentItem() {
-                            var showDetails = AppCore.selectedHouse === title;
-                            AppCore.selectedHouse = title;
-                            map.gesture.enabled = false; // workaround for issue #76 Text-Bubble muss 2x angetippt werden
+                            var showDetails = AppCore.selectedHouse === title
+                            AppCore.selectedHouse = title
+                            map.gesture.enabled = false // workaround for issue #76 Text-Bubble muss 2x angetippt werden
                             if (showDetails) {
-                                AppCore.showDetails = true;
-                                AppCore.centerSelectedHouse();
+                                AppCore.showDetails = true
+                                AppCore.centerSelectedHouse()
                             }
                         }
                     }
@@ -297,9 +300,9 @@ BaseView {
                             anchors.fill: parent
 
                             onReleased: {
-                                AppCore.selectedHouse = title;
-                                AppCore.showDetails = true;
-                                AppCore.centerSelectedHouse();
+                                AppCore.selectedHouse = title
+                                AppCore.showDetails = true
+                                AppCore.centerSelectedHouse()
                             }
                         }
                     }
@@ -315,8 +318,8 @@ BaseView {
         }
 
         Component.onCompleted: {
-            root.updateRadius();
-            map.plugin = initPlugin();
+            root.updateRadius()
+            map.plugin = initPlugin()
         }
     }
 
@@ -335,13 +338,13 @@ BaseView {
         target: routeLoader
         onLoadingChanged: {
             if (!routeLoader.loading) {
-                var newRouteHouses = [];
-                for (var i=0; i< routeLoader.routeHouses.length; ++i) {
+                var newRouteHouses = []
+                for (var i = 0; i < routeLoader.routeHouses.length; ++i) {
                     newRouteHouses.push(routeLoader.routeHouses[i].title)
                 }
-                locationFilter.setRouteHouses(newRouteHouses);
+                locationFilter.setRouteHouses(newRouteHouses)
 
-                map.visibleRegion = routeLoader.routeArea;
+                map.visibleRegion = routeLoader.routeArea
             }
         }
     }
@@ -350,12 +353,12 @@ BaseView {
         target: AppCore
         onCurrentMapPositionChanged: {
             if (map.center !== AppCore.currentMapPosition) {
-                map.center = AppCore.currentMapPosition;
+                map.center = AppCore.currentMapPosition
             }
         }
         onRequestFullZoomIn: {
             if (map.zoomLevel < 18) {
-                map.zoomLevel = 19;
+                map.zoomLevel = 19
             }
         }
     }
