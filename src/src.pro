@@ -3,7 +3,7 @@ TEMPLATE = app
 TARGET = Baugeschichte
 
 # No spaces here - for the android build script
-VERSION=2.2.0
+VERSION=2.2.1
 
 DEFINES += APP_VERSION='\'"$$VERSION"\''
 
