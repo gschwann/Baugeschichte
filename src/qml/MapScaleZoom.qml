@@ -19,7 +19,7 @@ Item {
         anchors.margins: -5
         opacity: 0.5
         onClicked: {
-            zoomSlider.visible = !zoomSlider.visible;
+            zoomSlider.visible = !zoomSlider.visible
         }
     }
 
@@ -43,31 +43,31 @@ Item {
         anchors.right: parent.right
         orientation: Qt.Vertical
         onValueChanged: {
-            mapItem.zoomLevel = value;
+            mapItem.zoomLevel = value
         }
     }
 
-    Connections{
+    Connections {
         target: mapItem
-        onZoomLevelChanged: {
+        function onZoomLevelChanged() {
             if (!zoomSlider.pressed) {
-                zoomSlider.value = mapItem.zoomLevel;
+                zoomSlider.value = mapItem.zoomLevel
             }
-            scaleItem.calculateScale();
+            scaleItem.calculateScale()
         }
-        onWidthChanged: {
-            scaleItem.calculateScale();
-            root.adaptSliderVisibility();
+        function onWidthChanged() {
+            scaleItem.calculateScale()
+            root.adaptSliderVisibility()
         }
-        onHeightChanged: {
-            scaleItem.calculateScale();
-            root.adaptSliderVisibility();
+        function onHeightChanged() {
+            scaleItem.calculateScale()
+            root.adaptSliderVisibility()
         }
     }
 
     Component.onCompleted: {
-        zoomSlider.value = mapItem.zoomLevel;
-        scaleItem.calculateScale();
-        root.adaptSliderVisibility();
+        zoomSlider.value = mapItem.zoomLevel
+        scaleItem.calculateScale()
+        root.adaptSliderVisibility()
     }
 }

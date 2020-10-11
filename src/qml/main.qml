@@ -1,4 +1,6 @@
-﻿/**
+﻿
+
+/**
  ** This file is part of the Baugeschichte.at project.
  **
  ** The MIT License (MIT)
@@ -23,7 +25,6 @@
  ** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  ** SOFTWARE.
  **/
-
 import Baugeschichte 1.0
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
@@ -45,22 +46,23 @@ Item {
 
     Material.accent: Material.LightBlue
 
-    readonly property bool loading: (uiStack.currentItem && uiStack.currentItem.loading) ||
-                                    MarkerLoader.loading ||
-                                    CategoryLoader.isLoading || routeLoader.loading
+    readonly property bool loading: (uiStack.currentItem
+                                     && uiStack.currentItem.loading)
+                                    || MarkerLoader.loading
+                                    || CategoryLoader.isLoading
+                                    || routeLoader.loading
 
     property MapComponent mainMap: null
 
-    function goBack()
-    {
+    function goBack() {
         console.log("uiStack Depth:" + uiStack.depth)
         if (uiStack.currentItem.detailsOpen) {
-            AppCore.showDetails = false;
+            AppCore.showDetails = false
         } else {
             if (uiStack.depth > 1) {
-                uiStack.pop();
+                uiStack.pop()
             } else {
-                shutDownDialog.open();
+                shutDownDialog.open()
             }
         }
     }
@@ -75,14 +77,14 @@ Item {
         id: reloadAction
         sequence: "Ctrl+R"
         onActivated: {
-            AppCore.reloadUI();
+            AppCore.reloadUI()
         }
     }
     Shortcut {
         id: settingsMenuAction
         sequence: "Ctrl+M"
         onActivated: {
-            uiStack.push(Qt.resolvedUrl("SettingsView.qml"));
+            uiStack.push(Qt.resolvedUrl("SettingsView.qml"))
         }
     }
 
@@ -104,8 +106,8 @@ Item {
 
     Connections {
         target: AppCore
-        onBackKeyPressed: {
-            root.goBack();
+        function onBackKeyPressed() {
+            root.goBack()
         }
     }
 
@@ -119,8 +121,8 @@ Item {
         Keys.onReleased: {
             console.log("Keys.onrelease")
             if (event.key === Qt.Key_Menu) {
-                event.accepted = true;
-                uiStack.push(Qt.resolvedUrl("SettingsView.qml"));
+                event.accepted = true
+                uiStack.push(Qt.resolvedUrl("SettingsView.qml"))
             }
         }
     }
@@ -158,10 +160,11 @@ Item {
 
                     visible: parent.splitScreen || !details.visible
 
-                    center: QtPositioning.coordinate(settings.lastSeenLat, settings.lastSeenLon)
+                    center: QtPositioning.coordinate(settings.lastSeenLat,
+                                                     settings.lastSeenLon)
                     zoomLevel: settings.lastZoomLevel
                     Component.onCompleted: {
-                        root.mainMap = mapOfEurope;
+                        root.mainMap = mapOfEurope
                     }
                     Component.onDestruction: {
                         settings.lastSeenLat = mapOfEurope.center.latitude
@@ -174,7 +177,9 @@ Item {
                         interval: 5
                         running: true
                         onTriggered: {
-                            mapOfEurope.center = QtPositioning.coordinate(settings.lastSeenLat, settings.lastSeenLon);
+                            mapOfEurope.center = QtPositioning.coordinate(
+                                        settings.lastSeenLat,
+                                        settings.lastSeenLon)
                         }
                     }
                 }
@@ -184,15 +189,17 @@ Item {
 
                     property bool fullscreen: item ? item.fullscreen : false
 
-                    x: visible ? (parent.splitScreen && !fullscreen ? parent.width / 2 : 0) : parent.width
-                    width: parent.splitScreen && !fullscreen ? parent.width / 2 : parent.width
+                    x: visible ? (parent.splitScreen
+                                  && !fullscreen ? parent.width / 2 : 0) : parent.width
+                    width: parent.splitScreen
+                           && !fullscreen ? parent.width / 2 : parent.width
                     height: parent.height
 
                     clip: true
                     visible: AppCore.showDetails
                     onVisibleChanged: {
                         if (visible && source == "") {
-                            setSource("DetailsView.qml");
+                            setSource("DetailsView.qml")
                         }
                     }
                 }
@@ -205,23 +212,23 @@ Item {
             readonly property bool detailsOpen: item ? item.detailsOpen : false
 
             function reloadMapItem() {
-                posRestore.latitude = item.center.latitude;
-                posRestore.longitude = item.center.longitude;
-                posRestore.zoom = item.zoomLevel;
-                posRestore.start();
+                posRestore.latitude = item.center.latitude
+                posRestore.longitude = item.center.longitude
+                posRestore.zoom = item.zoomLevel
+                posRestore.start()
 
-                settings.lastSeenLat = item.center.latitude;
-                settings.lastSeenLon = item.center.longitude;
-                settings.lastZoomLevel = item.zoomLevel;
+                settings.lastSeenLat = item.center.latitude
+                settings.lastSeenLon = item.center.longitude
+                settings.lastZoomLevel = item.zoomLevel
 
-                loader_mapOfEurope.sourceComponent = undefined;
-                loader_mapOfEurope.sourceComponent = component_mapOfEurope;
+                loader_mapOfEurope.sourceComponent = undefined
+                loader_mapOfEurope.sourceComponent = component_mapOfEurope
             }
 
             Connections {
                 target: AppCore
-                onMapProviderChanged: {
-                    loader_mapOfEurope.reloadMapItem();
+                function onMapProviderChanged() {
+                    loader_mapOfEurope.reloadMapItem()
                 }
             }
         }
@@ -236,8 +243,9 @@ Item {
 
         interval: 200
         onTriggered: {
-            loader_mapOfEurope.item.center = QtPositioning.coordinate(latitude, longitude);
-            loader_mapOfEurope.item.zoomLevel = zoom;
+            loader_mapOfEurope.item.center = QtPositioning.coordinate(latitude,
+                                                                      longitude)
+            loader_mapOfEurope.item.zoomLevel = zoom
         }
     }
 

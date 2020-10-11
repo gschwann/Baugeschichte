@@ -1,3 +1,5 @@
+
+
 /**
  ** This file is part of the Baugeschichte.at project.
  **
@@ -23,7 +25,6 @@
  ** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  ** SOFTWARE.
  **/
-
 import Baugeschichte 1.0
 import QtQuick 2.4
 import QtQuick.Controls 2.0
@@ -249,7 +250,7 @@ BaseView {
 
                         Connections {
                             target: routeLoader
-                            onLoadingChanged: {
+                            function onLoadingChanged() {
                                 if (!routeLoader.loading) {
                                     image.source = Qt.binding(function () {
                                         return image.getSource()
@@ -336,7 +337,7 @@ BaseView {
 
     Connections {
         target: routeLoader
-        onLoadingChanged: {
+        function onLoadingChanged() {
             if (!routeLoader.loading) {
                 var newRouteHouses = []
                 for (var i = 0; i < routeLoader.routeHouses.length; ++i) {
@@ -351,12 +352,12 @@ BaseView {
 
     Connections {
         target: AppCore
-        onCurrentMapPositionChanged: {
+        function onCurrentMapPositionChanged() {
             if (map.center !== AppCore.currentMapPosition) {
                 map.center = AppCore.currentMapPosition
             }
         }
-        onRequestFullZoomIn: {
+        function onRequestFullZoomIn() {
             if (map.zoomLevel < 18) {
                 map.zoomLevel = 19
             }
