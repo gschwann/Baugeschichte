@@ -483,7 +483,7 @@ void ApplicationCore::loadMarkers()
 
     // Some weired error with old markers leads to a crash when filtering them
     QFileInfo fi(file);
-    QDateTime roughBuild(QDate(2016, 12, 9));
+    QDateTime roughBuild(QDate(2016, 12, 9).startOfDay());
     if (fi.lastModified() > roughBuild) {
         return;
     }
