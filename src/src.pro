@@ -163,3 +163,4 @@ for(tsfile, TRANSLATIONS) {
     command = $$LRELEASE $$tsfile
     system($$command)|error("Failed to run: $$command")
 }
+android: include(/opt/android/android-sdk/android_openssl/openssl.pri)

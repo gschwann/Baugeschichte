@@ -39,6 +39,8 @@ translations/*.qm
 *.qmlproject.user
 *.qmlproject.user.*
 
+qml_qmlcache.qrc
+
 # backup files
 *~
 
