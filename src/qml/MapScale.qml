@@ -24,7 +24,7 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.4
+import QtQuick
 
 /**
  Indicator for the Map to show the scale/distances

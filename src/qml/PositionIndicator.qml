@@ -24,9 +24,9 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.5
-import QtLocation 5.5
-import QtPositioning 5.5
+import QtQuick
+import QtLocation
+import QtPositioning
 import "."
 
 /**

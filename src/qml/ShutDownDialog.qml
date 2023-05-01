@@ -1,3 +1,4 @@
+
 /**
  ** This file is part of the Baugeschichte.at project.
  **
@@ -21,21 +22,21 @@
  ** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  ** SOFTWARE.
  **/
-
-import QtQuick 2.4
-import QtQuick.Dialogs 1.2
+import QtQuick
+import QtQuick.Dialogs
 
 MessageDialog {
     id: shutDownDialog
-    icon: StandardIcon.Question
-    standardButtons: StandardButton.Yes | StandardButton.No
+    buttons: MessageDialog.Yes | MessageDialog.No
     modality: Qt.WindowModal
     title: qsTr("Quit Baugeschichte App?")
+    text: qsTr("Quit Baugeschichte App?")
     visible: false
-    onYes: {
-        Qt.quit();
-    }
-    onNo: {
-        visible = false;
+    onButtonClicked: function (button, role) {
+        switch (button) {
+        case MessageDialog.Yes:
+            Qt.quit()
+            break
+        }
     }
 }

@@ -24,7 +24,7 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.4
+import QtQuick
 
 Item {
     property bool loading: false

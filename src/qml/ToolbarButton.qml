@@ -24,7 +24,7 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.4
+import QtQuick
 import "."
 
 Item {
@@ -32,7 +32,7 @@ Item {
 
     property alias source: icon.source
 
-    signal clicked(var mouse)
+    signal clicked()
 
     width: height
     height: Theme.toolButtonHeight
@@ -47,7 +47,7 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            root.clicked(mouse);
+            root.clicked();
         }
     }
 }

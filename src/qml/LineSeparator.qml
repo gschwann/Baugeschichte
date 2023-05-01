@@ -24,7 +24,7 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.0
+import QtQuick
 
 // a horizontal ruler with some vertical spaces
 Item {

@@ -26,11 +26,11 @@
  ** SOFTWARE.
  **/
 import Baugeschichte 1.0
-import QtQuick 2.4
-import QtQuick.Controls 2.0
-import QtQuick.Window 2.2
-import QtLocation 5.9
-import QtPositioning 5.5
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
+import QtLocation
+import QtPositioning
 import "./"
 
 BaseView {
@@ -121,8 +121,8 @@ BaseView {
         height: parent.height / scale
         scale: AppCore.extraScaling ? 2 : 1 //AppCore.mapProvider === "mapboxgl" ? 1 : Screen.devicePixelRatio
 
-        gesture.acceptedGestures: MapGestureArea.PinchGesture | MapGestureArea.PanGesture
-                                  | MapGestureArea.FlickGesture
+        //gesture.acceptedGestures: MapGestureArea.PinchGesture | MapGestureArea.PanGesture
+        //                          | MapGestureArea.FlickGesture
 
         readonly property int markerSize: Theme.defaultMarkerSize / map.scale
 
@@ -143,17 +143,44 @@ BaseView {
             root.updateRadius()
         }
 
-        MultiPointTouchArea {
-            anchors.fill: parent
-            onPressed: {
-                AppCore.followPosition = false
-                map.gesture.enabled
-                        = true // workaround for issue #76 Text-Bubble muss 2x angetippt werden
+        PinchHandler {
+            id: pinch
+            target: null
+            onActiveChanged: if (active) {
+                map.startCentroid = map.toCoordinate(pinch.centroid.position, false)
             }
-            onReleased: {
-                AppCore.clearHouseSelection()
+            onScaleChanged: (delta) => {
+                map.zoomLevel += Math.log2(delta)
+                map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
             }
+            onRotationChanged: (delta) => {
+                map.bearing -= delta
+                map.alignCoordinateToPoint(map.startCentroid, pinch.centroid.position)
+            }
+            grabPermissions: PointerHandler.TakeOverForbidden
         }
+        WheelHandler {
+            id: wheel
+            rotationScale: 1/120
+            property: "zoomLevel"
+        }
+        DragHandler {
+            id: drag
+            target: null
+            onTranslationChanged: (delta) => map.pan(-delta.x, -delta.y)
+        }
+
+//        MultiPointTouchArea {
+//            anchors.fill: parent
+//            onPressed: {
+//                AppCore.followPosition = false
+//                map.gesture.enabled
+//                        = true // workaround for issue #76 Text-Bubble muss 2x angetippt werden
+//            }
+//            onReleased: {
+//                AppCore.clearHouseSelection()
+//            }
+//        }
 
         //        plugin: initPlugin() // is initialized in Component.onCompleted
         function initPlugin() {

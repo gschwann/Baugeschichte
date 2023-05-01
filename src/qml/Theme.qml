@@ -26,9 +26,9 @@
 
 pragma Singleton
 
-import QtQuick 2.5
-import QtQuick.Controls 2.0
-import QtQuick.Window 2.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
 
 Item {
     id: root

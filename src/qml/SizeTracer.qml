@@ -24,7 +24,7 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.6
+import QtQuick
 
 /**
  Component, used to visualize the size of it's parent.

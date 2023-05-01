@@ -26,14 +26,14 @@
  ** SOFTWARE.
  **/
 import Baugeschichte 1.0
-import QtQuick 2.5
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls.Material 2.0
-import QtPositioning 5.5
-import QtLocation 5.5
-import Qt.labs.settings 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+//import QtQuick.Controls.Styles 1.4
+//import QtQuick.Controls.Material 2.0
+import QtPositioning
+import QtLocation
+import QtCore
 import "./"
 
 Item {
@@ -44,8 +44,7 @@ Item {
 
     visible: true
 
-    Material.accent: Material.LightBlue
-
+    //    Material.accent: Material.LightBlue
     readonly property bool loading: (uiStack.currentItem
                                      && uiStack.currentItem.loading)
                                     || MarkerLoader.loading
@@ -53,7 +52,6 @@ Item {
                                     || routeLoader.loading
 
     property MapComponent mainMap: null
-
     function goBack() {
         console.log("uiStack Depth:" + uiStack.depth)
         if (uiStack.currentItem.detailsOpen) {
@@ -149,7 +147,6 @@ Item {
 
                 property alias center: mapOfEurope.center
                 property alias zoomLevel: mapOfEurope.zoomLevel
-
                 loading: details.item ? details.item.loading : false
 
                 MapComponent {
@@ -183,7 +180,6 @@ Item {
                         }
                     }
                 }
-
                 Loader {
                     id: details
 

@@ -24,10 +24,10 @@
  ** SOFTWARE.
  **/
 
-import QtQuick 2.5
-import QtQuick.XmlListModel 2.0
-import QtLocation 5.5
-import QtPositioning 5.5
+import QtQuick
+import QtQml.XmlListModel
+import QtLocation
+import QtPositioning
 
 MapPolyline {
     id: root
@@ -50,10 +50,11 @@ MapPolyline {
 
         source: root.source
 
-        namespaceDeclarations: "declare default element namespace 'http://earth.google.com/kml/2.0';"
+        //namespaceDeclarations: "declare default element namespace 'http://earth.google.com/kml/2.0';"
         query: "/kml/Document/Folder/Placemark/LineString"
 
-        XmlRole { name: "coordinates"; query: "coordinates/string()" }
+        //XmlRole { name: "coordinates"; query: "coordinates/string()" }
+        XmlListModelRole { name: "coordinates"; attributeName: "coordinates/string()" }
 
         onStatusChanged: {
             if (status == XmlListModel.Ready) {
@@ -72,10 +73,11 @@ MapPolyline {
 
         source: root.source
 
-        namespaceDeclarations: "declare default element namespace 'http://www.opengis.net/kml/2.2';"
+        //namespaceDeclarations: "declare default element namespace 'http://www.opengis.net/kml/2.2';"
         query: "/kml/Document/Folder/Placemark/LineString"
 
-        XmlRole { name: "coordinates"; query: "coordinates/string()" }
+        //XmlRole { name: "coordinates"; query: "coordinates/string()" }
+        XmlListModelRole { name: "coordinates"; attributeName: "coordinates/string()" }
 
         onStatusChanged: {
             if (status == XmlListModel.Ready) {
@@ -94,10 +96,11 @@ MapPolyline {
 
         source: root.source
 
-        namespaceDeclarations: "declare default element namespace 'http://earth.google.com/kml/2.2';"
+        //namespaceDeclarations: "declare default element namespace 'http://earth.google.com/kml/2.2';"
         query: "/kml/Document/Placemark/LineString"
 
-        XmlRole { name: "coordinates"; query: "coordinates/string()" }
+        //XmlRole { name: "coordinates"; query: "coordinates/string()" }
+        XmlListModelRole { name: "coordinates"; attributeName: "coordinates/string()" }
 
         onStatusChanged: {
             if (status == XmlListModel.Ready) {
