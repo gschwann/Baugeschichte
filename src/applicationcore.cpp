@@ -28,11 +28,9 @@
 #include "categoryloader.h"
 #include "houselocationfilter.h"
 #include "housemarker.h"
-#include "housemarkermodel.h"
 #include "mainwindow.h"
 #include "markerloader.h"
 
-#include <QApplication>
 #include <QByteArray>
 #include <QDateTime>
 #include <QDebug>
@@ -40,6 +38,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QGuiApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonParseError>
@@ -100,7 +99,7 @@ ApplicationCore::ApplicationCore(QObject* parent)
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
     QQmlEngine* engine = m_view->engine();
-    connect(engine, &QQmlEngine::quit, qApp, &QApplication::quit);
+    connect(engine, &QQmlEngine::quit, qApp, &QGuiApplication::quit);
 
     connect(m_markerLoader, &MarkerLoader::newHousetrail, m_houseMarkerModel, &HouseMarkerModel::append);
 
@@ -292,7 +291,7 @@ void ApplicationCore::setExtraScaling(bool extraScaling)
 
 QString ApplicationCore::versionString() const
 {
-    return QApplication::applicationVersion();
+    return QGuiApplication::applicationVersion();
 }
 
 void ApplicationCore::handleApplicationStateChange(Qt::ApplicationState state)
@@ -483,7 +482,7 @@ void ApplicationCore::loadMarkers()
 
     // Some weired error with old markers leads to a crash when filtering them
     QFileInfo fi(file);
-    QDateTime roughBuild(QDate(2016, 12, 9));
+    QDateTime roughBuild(QDate(2016, 12, 9), QTime(11, 11));
     if (fi.lastModified() > roughBuild) {
         return;
     }
@@ -499,7 +498,7 @@ void ApplicationCore::loadMarkers()
 
     QVector<HouseMarker> houses;
     houses.reserve(array.size());
-    Q_FOREACH (const QJsonValue& value, array) {
+    for (const QJsonValue& value : array) {
         QJsonObject object = value.toObject();
         HouseMarker house;
         house.setTitle(object["title"].toString());

@@ -27,12 +27,13 @@
 #ifndef APPLICATIONCORE_H
 #define APPLICATIONCORE_H
 
+#include "housemarkermodel.h"
+
 #include <QGeoCoordinate>
 #include <QObject>
 #include <QString>
 
 class CategoryLoader;
-class HouseMarkerModel;
 class MainWindow;
 class MarkerLoader;
 

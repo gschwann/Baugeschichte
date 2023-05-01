@@ -25,7 +25,6 @@
  **/
 
 #include "housemarkermodel.h"
-#include "housemarker.h"
 
 #include <QDebug>
 #include <QGeoCoordinate>
@@ -49,7 +48,7 @@ void HouseMarkerModel::append(const QVector<HouseMarker>& aHouseTrail)
     limitSize();
 
     std::set<HouseMarker> newHouses; // use a set to eliminate duplicates
-    foreach (const HouseMarker& house, aHouseTrail) {
+    for (const HouseMarker& house : aHouseTrail) {
         if (!this->contains(house)) {
             newHouses.insert(house);
         }
@@ -62,7 +61,7 @@ void HouseMarkerModel::append(const QVector<HouseMarker>& aHouseTrail)
     }
 
     beginInsertRows(QModelIndex(), rowCount(), insertEnd);
-    foreach (const HouseMarker& house, newHouses) {
+    for (const HouseMarker& house : newHouses) {
         HouseMarker* newHouse = new HouseMarker(house);
         m_contained.insert(house.title(), newHouse);
         m_housetrails.append(newHouse);

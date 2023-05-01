@@ -27,6 +27,8 @@
 #ifndef HOUSEMARKERIMAGES_H
 #define HOUSEMARKERIMAGES_H
 
+#include "housemarker.h"
+
 #include <QAbstractListModel>
 #include <QHash>
 #include <QList>
@@ -36,8 +38,6 @@
 
 class QByteArray;
 class QModelIndex;
-
-class HouseMarker;
 
 class HouseMarkerModel : public QAbstractListModel
 {

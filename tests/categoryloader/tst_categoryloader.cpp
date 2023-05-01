@@ -34,10 +34,8 @@
 #include <QGeoCoordinate>
 #include <QList>
 #include <QSignalSpy>
-#include <QVector>
 #include <QTest>
-
-Q_DECLARE_METATYPE(QVector<HouseMarker>)
+#include <QVector>
 
 class tst_CategoryLoader : public QObject
 {
@@ -83,7 +81,7 @@ void tst_CategoryLoader::testFail()
 
     QCOMPARE(spy.size(), 1);
     QList<QVariant> arguments = spy.takeFirst();
-    QVector<HouseMarker> markers = arguments.at(0).value<QVector<HouseMarker> >();
+    QVector<HouseMarker> markers = arguments.at(0).value<QVector<HouseMarker>>();
 
     QCOMPARE(markers.size(), 99);
 

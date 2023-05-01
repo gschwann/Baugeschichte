@@ -83,7 +83,7 @@ MarkerLoader::MarkerLoader(QObject* parent)
     d->m_manager = new QNetworkAccessManager(this);
     connect(&(d->m_lazyLoadTimer), &QTimer::timeout, this, &MarkerLoader::loadMarkers);
 
-    connect(d->m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(poisFinished(QNetworkReply*)));
+    connect(d->m_manager, &QNetworkAccessManager::finished, this, &MarkerLoader::poisFinished);
 }
 
 MarkerLoader::~MarkerLoader()
@@ -192,7 +192,7 @@ void MarkerLoader::loadMarkers()
 void MarkerLoader::poisFinished(QNetworkReply* theReply)
 {
     Q_D(MarkerLoader);
-    QtConcurrent::run(this, &MarkerLoader::createModelAsync, theReply);
+    QtConcurrent::run([this, theReply]() { this->createModelAsync(theReply); });
 
     const QNetworkRequest& request = theReply->request();
     d->m_requests.removeOne(request);
@@ -205,52 +205,52 @@ void MarkerLoader::poisFinished(QNetworkReply* theReply)
 
 void MarkerLoader::createModelAsync(QNetworkReply* theReply)
 {
-    //    qDebug() << Q_FUNC_INFO;
-    QString theResponse;
-    if (theReply) {
-        if (theReply->error() == QNetworkReply::NoError) {
-            const qint64 available = theReply->bytesAvailable();
-            if (available > 0) {
-                const QByteArray buffer = QString::fromUtf8(theReply->readAll()).toLatin1();
-                QJsonParseError anError;
-                QJsonDocument aDoc = QJsonDocument::fromJson(buffer, &anError);
-                if (QJsonParseError::NoError != anError.error) {
-                    qDebug() << anError.errorString();
-                    return;
-                }
-
-                if (!aDoc.isObject()) {
-                    qDebug() << "no object..." << aDoc.toVariant();
-                }
-                QJsonDocument doc;
-                {
-                    QJsonObject anInfoObject = aDoc.object();
-                    QJsonArray theValueArray = anInfoObject["payload"].toArray();
-                    QVector<HouseMarker> markers;
-                    markers.reserve(theValueArray.size());
-                    foreach (const QJsonValue& theValue, theValueArray) {
-                        HouseMarker aHouseTrail;
-                        QJsonObject anObj = theValue.toObject();
-                        aHouseTrail.setTitle(anObj["title"].toString());
-                        aHouseTrail.setLocation(QGeoCoordinate(anObj["lat"].toDouble(), anObj["lon"].toDouble()));
-
-                        doc.setArray(anObj["cats"].toArray());
-
-                        aHouseTrail.setCategories(doc.toJson());
-                        markers.push_back(aHouseTrail);
-                    }
-
-                    Q_EMIT newHousetrail(markers);
-                }
-            } else
-                theResponse = "empty";
-        } else {
-            theResponse = tr("Error: %1 status: %2")
-                              .arg(theReply->errorString(),
-                                  theReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString());
-        }
-        theReply->deleteLater();
+    if (!theReply) {
+        return;
     }
+
+    QString theResponse;
+    if (theReply->error() != QNetworkReply::NoError) {
+        const qint64 available = theReply->bytesAvailable();
+        if (available > 0) {
+            const QByteArray buffer = QString::fromUtf8(theReply->readAll()).toLatin1();
+            QJsonParseError anError;
+            QJsonDocument aDoc = QJsonDocument::fromJson(buffer, &anError);
+            if (QJsonParseError::NoError != anError.error) {
+                qDebug() << anError.errorString();
+                return;
+            }
+
+            if (!aDoc.isObject()) {
+                qDebug() << "no object..." << aDoc.toVariant();
+            }
+            QJsonDocument doc;
+            {
+                QJsonObject anInfoObject = aDoc.object();
+                QJsonArray theValueArray = anInfoObject["payload"].toArray();
+                QVector<HouseMarker> markers;
+                markers.reserve(theValueArray.size());
+                for (const QJsonValue& theValue : theValueArray) {
+                    HouseMarker aHouseTrail;
+                    QJsonObject anObj = theValue.toObject();
+                    aHouseTrail.setTitle(anObj["title"].toString());
+                    aHouseTrail.setLocation(QGeoCoordinate(anObj["lat"].toDouble(), anObj["lon"].toDouble()));
+
+                    doc.setArray(anObj["cats"].toArray());
+
+                    aHouseTrail.setCategories(doc.toJson());
+                    markers.push_back(aHouseTrail);
+                }
+
+                Q_EMIT newHousetrail(markers);
+            }
+        }
+    } else {
+        theResponse = tr("Error: %1 status: %2")
+                          .arg(theReply->errorString(),
+                              theReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString());
+    }
+    theReply->deleteLater();
 }
 
 void MarkerLoader::setLoading(bool loading)

@@ -27,6 +27,9 @@
 #ifndef HOUSEMARKER_H
 #define HOUSEMARKER_H
 
+#include <QMetaType>
+#include <QVector>
+
 class HouseMarkerPrivate;
 class QGeoCoordinate;
 class QString;
@@ -57,5 +60,8 @@ private:
 };
 
 bool operator<(const HouseMarker& lhs, const HouseMarker& rhs);
+
+Q_DECLARE_METATYPE(HouseMarker)
+Q_DECLARE_METATYPE(QVector<HouseMarker>)
 
 #endif // HOUSEMARKER_H
