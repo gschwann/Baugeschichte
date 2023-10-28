@@ -184,51 +184,53 @@ BaseView {
 
         //        plugin: initPlugin() // is initialized in Component.onCompleted
         function initPlugin() {
-            switch (AppCore.mapProvider) {
-            case "mapboxGl":
-                return mapboxGlPlugin
-            case "mapbox":
-                return mapBoxPlugin
-            case "osm":
-                return osmPlugin
-            default:
-                return mapboxGlPlugin
-            }
+//            switch (AppCore.mapProvider) {
+//            case "mapboxGl":
+//                return mapboxGlPlugin
+//            case "mapbox":
+//                return mapBoxPlugin
+//            case "osm":
+//                return osmPlugin
+//            default:
+//                return mapboxGlPlugin
+//            }
             //            return mapboxGlPlugin;
             //            return mapBoxPlugin;
-            //            return osmPlugin;
+                        return osmPlugin;
         }
-        Plugin {
-            id: mapBoxPlugin
-            name: "mapbox"
-            PluginParameter {
-                name: "mapbox.access_token"
-                value: "pk.eyJ1IjoiYmF1Z2VzY2hpY2h0ZSIsImEiOiJjaXFqdXU4OG8wMDAxaHltYnVmcHV2bjVjIn0.C2joRbxcvAQGbF9I-KhgnA"
-            }
-            PluginParameter {
-                name: "mapbox.mapping.highdpi_tiles"
-                value: Screen.devicePixelRatio > 1
-            }
-        }
-        Plugin {
-            id: mapboxGlPlugin
-            name: "mapboxgl"
-            PluginParameter {
-                name: "mapboxgl.access_token"
-                value: "pk.eyJ1IjoiYmF1Z2VzY2hpY2h0ZSIsImEiOiJjaXFqdXU4OG8wMDAxaHltYnVmcHV2bjVjIn0.C2joRbxcvAQGbF9I-KhgnA"
-            }
-        }
+//        Plugin {
+//            id: mapBoxPlugin
+//            name: "mapbox"
+//            PluginParameter {
+//                name: "mapbox.access_token"
+//                value: "pk.eyJ1IjoiYmF1Z2VzY2hpY2h0ZSIsImEiOiJjaXFqdXU4OG8wMDAxaHltYnVmcHV2bjVjIn0.C2joRbxcvAQGbF9I-KhgnA"
+//            }
+//            PluginParameter {
+//                name: "mapbox.mapping.highdpi_tiles"
+//                value: Screen.devicePixelRatio > 1
+//            }
+//        }
+//        Plugin {
+//            id: mapboxGlPlugin
+//            name: "mapboxgl"
+//            PluginParameter {
+//                name: "mapboxgl.access_token"
+//                value: "pk.eyJ1IjoiYmF1Z2VzY2hpY2h0ZSIsImEiOiJjaXFqdXU4OG8wMDAxaHltYnVmcHV2bjVjIn0.C2joRbxcvAQGbF9I-KhgnA"
+//            }
+//        }
         Plugin {
             id: osmPlugin
             name: "osm"
-            PluginParameter {
-                name: "osm.useragent"
-                value: "Baugeschichte/GrazWiki"
-            }
-            PluginParameter {
-                name: "osm.mapping.highdpi_tiles"
-                value: Screen.devicePixelRatio > 1
-            }
+//            PluginParameter {
+//                name: "osm.useragent"
+//                value: "Baugeschichte/GrazWiki"
+//            }
+//            PluginParameter {
+//                name: "osm.mapping.highdpi_tiles"
+//                value: Screen.devicePixelRatio > 1
+//            }
+            PluginParameter { name: "osm.mapping.providersrepository.address"; value: "http://baugeschichte.at" }
+            PluginParameter { name: "osm.mapping.highdpi_tiles"; value: true }
         }
 
         RouteLine {

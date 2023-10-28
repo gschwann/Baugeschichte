@@ -210,7 +210,7 @@ void MarkerLoader::createModelAsync(QNetworkReply* theReply)
     }
 
     QString theResponse;
-    if (theReply->error() != QNetworkReply::NoError) {
+    if (theReply->error() == QNetworkReply::NoError) {
         const qint64 available = theReply->bytesAvailable();
         if (available > 0) {
             const QByteArray buffer = QString::fromUtf8(theReply->readAll()).toLatin1();
@@ -249,6 +249,7 @@ void MarkerLoader::createModelAsync(QNetworkReply* theReply)
         theResponse = tr("Error: %1 status: %2")
                           .arg(theReply->errorString(),
                               theReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString());
+        qWarning() << theResponse;
     }
     theReply->deleteLater();
 }
